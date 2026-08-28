@@ -93,9 +93,9 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
 <section>
   <div class="rail">What's being done<small>Status, 28 Aug</small></div>
   <div class="prose">
-    <h2>One host class proven. A second is the test.</h2>
+    <h2>One host class proven. A second survived the schema test.</h2>
     <div class="figures">
-      <div class="fig"><div class="n">11</div><div class="l">canonical schemas</div></div>
+      <div class="fig"><div class="n">11</div><div class="l">schemas, shared by browser and debugger</div></div>
       <div class="fig"><div class="n ok">36/36</div><div class="l">corpus runs on real WebKitGTK, ×2 variants</div></div>
       <div class="fig"><div class="n ok">6 / 6</div><div class="l">oracle-applicable scenarios equivalent</div></div>
       <div class="fig"><div class="n">12/12</div><div class="l">wire tests, MCP 2026-07-28</div></div>
@@ -107,8 +107,9 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
       <li><span class="when">Step 0 · done</span><p>Verify the eight assumed MCP 2026-07-28 / A2A 1.0.0 features against the specs. All eight held; four nuances recorded. Nothing had to be deleted.</p></li>
       <li><span class="when">Step 1 · done</span><p>Align every browser-workbench and HostProto 0.1.0 type to a schema. Four semantics the lineage had lost were recovered: operation <code>outcome</code> including <code>unknown</code>, typed suppression records, surface lifecycle, capability degradation.</p></li>
       <li><span class="when">Step 2 · done</span><p>Playwright reference adapter on the wire. Two corrections to step 0 came back from real traffic.</p></li>
-      <li><span class="when">Step 3 · next</span><p>The DAP schema spike — a debug session on paper, no runtime. Frames as revision-scoped targets that invalidate on resume. This is where the thesis can fail.</p></li>
-      <li><span class="when">Steps 4–6</span><p>A2A host-worker with one skill; DAP runtime only if step 3 needed no envelope change; native WebKitGTK retained as the challenger.</p></li>
+      <li><span class="when">Step 3 · done</span><p>The DAP schema spike — a debug session in the unchanged schemas, no runtime. Frames and variables as revision-scoped targets that invalidate on resume; <code>Breakpoint.verified</code> as the receipt's oracle. Twenty-five instances validate; kill gates 1, 7 and 8 did not fire. One rule generalized: the cursor is always host-assigned.</p></li>
+      <li><span class="when">Step 4 · next</span><p>A2A host-worker: one Agent Card, one real workflow skill, backed by the domain runtime, using the MCP adapter internally.</p></li>
+      <li><span class="when">Steps 5–6</span><p>DAP runtime on debugpy, now admissible; native WebKitGTK retained as the challenger.</p></li>
     </ul>
   </div>
 </section>
@@ -148,7 +149,7 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
       <li>observation revision cannot be expressed uniformly across hosts;</li>
       <li>runtime verification stops being earnable per adapter.</li>
     </ol>
-    <p>Gates 2 and 6 were tested by step 2 and did not fire. Gates 1, 7 and 8 are what step 3 exists to test.</p>
+    <p>Gates 2 and 6 were tested by step 2 and did not fire. Gates 1, 7 and 8 were tested by the DAP spike in step 3 and did not fire either. What remains is the runtime: a spike proves the schemas can describe a debugger; only an adapter proves it can honour them.</p>
   </div>
 </section>
 
