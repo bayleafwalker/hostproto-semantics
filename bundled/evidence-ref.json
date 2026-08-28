@@ -1,5 +1,5 @@
 {
-  "$id": "https://hostproto.invalid/schemas/evidence-ref.schema.json",
+  "$id": "https://bayleafwalker.github.io/hostproto-semantics/schemas/v1/evidence-ref.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "Content-addressed. A reference never implies authority to retrieve data outside the evidence bundle it belongs to.",

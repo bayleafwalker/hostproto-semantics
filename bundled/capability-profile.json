@@ -1,5 +1,5 @@
 {
-  "$id": "https://hostproto.invalid/schemas/capability-profile.schema.json",
+  "$id": "https://bayleafwalker.github.io/hostproto-semantics/schemas/v1/capability-profile.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "runtime verification is earned only by an operation that completed in a passed run. Declaration never upgrades it. partial never satisfies an exact requirement.",

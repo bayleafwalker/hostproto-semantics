@@ -40,7 +40,7 @@
       "type": "object"
     }
   },
-  "$id": "https://hostproto.invalid/schemas/handles.schema.json",
+  "$id": "https://bayleafwalker.github.io/hostproto-semantics/schemas/v1/handles.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {

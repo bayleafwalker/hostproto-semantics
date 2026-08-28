@@ -113,7 +113,7 @@
       "type": "object"
     }
   },
-  "$id": "https://hostproto.invalid/schemas/receipt.schema.json",
+  "$id": "https://bayleafwalker.github.io/hostproto-semantics/schemas/v1/receipt.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "attempted/accepted/executed/verified are independent. A receipt with executed=true and verified=false is legitimate and must be reported as such.",

@@ -60,7 +60,7 @@ projections remain advisory evidence.
 ### 1. One-evening housekeeping
 
 - Tag `v0.1.0`.
-- Replace the `https://hostproto.invalid/...` placeholder `$id` URIs.
+- Replace the `https://hostproto.invalid/...` placeholder `$id` URIs → `https://bayleafwalker.github.io/hostproto-semantics/schemas/v1/` (done; a move to `schemas.vuoro.cloud/hostproto/v1/` is a line item of the *promote* branch in step 4).
 - Establish `hostproto-semantics` as canonical; archive the original
   `hostproto` repository (privately, per the standing decision).
 - Do **not** declare compatibility semantics yet; they are derived in step 4

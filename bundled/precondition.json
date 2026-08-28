@@ -1,5 +1,5 @@
 {
-  "$id": "https://hostproto.invalid/schemas/precondition.schema.json",
+  "$id": "https://bayleafwalker.github.io/hostproto-semantics/schemas/v1/precondition.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "Declared by the caller, checked by the adapter before the host is touched. Failure is precondition_failed and the host was not invoked.",
