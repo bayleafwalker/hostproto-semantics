@@ -155,3 +155,29 @@ unusually credible negative result. Neither branch wastes the work.
 - Step 7.2 done 2026-08-28: `vuoro/packages/vuoro-evidence` — core
   (`model`, `reducer`, `decision`), ingress (`hostproto`, `command-capture`),
   17 tests including the mechanical boundary check.
+
+## Step 3 record — 2026-08-28
+
+Two real sessions were recorded by `scripts/record-session.mts` in
+`hostproto-mcp-playwright` (79f72a5, Chromium, 10 calls) and
+`hostproto-dap-debugpy` (c5f5b97, debugpy, 14 calls) and committed as
+fixtures in `vuoro/packages/vuoro-evidence/tests/fixtures/`. Replayed
+through `vuoro_evidence.ingress.hostproto.session_log` into the reducer the
+command-capture lane also uses (vuoro `2ae1a8c`, 21 tests):
+
+| Required observation | Where it occurred on real traffic |
+| --- | --- |
+| Avoided blind rerun | browser `a-click` completed (rev 2→3) → `ACCEPT`; outctl capture within its window → `ACCEPT` |
+| Triggered reacquisition | browser `a-click-stale` `target_invalidated`, `host_invoked:false` → `REACQUIRE`, grant `unused`; a windowed receipt past `valid_until` → `EvidenceExpired(past_valid_until)` |
+| Reconciled uncertain outcome | debugpy `a-continue-unknown` `outcome:unknown` → grant `uncertain_use`, `RECONCILE(requires_observation)`; the next real observation saw the program running → confirmed, `USED`, `ACCEPT`; the post-pause observation contradicts → `REJECT` |
+
+Structural criterion so far: `tests/test_boundary.py` passes — no
+profile/adapter/host vocabulary in `core/`, no import of `ingress/` from
+`core/`. The only knowledge that had to live at the edge: how an
+observation confirms a receipt (a predicate over observation data, supplied
+by the correlator) and which action an error belongs to (the intent's
+`action_id` from the call log — the error object itself carries none).
+
+Not yet done for step 4: the same traffic from a second debugger binding
+(Delve) and an A2A-carried session, to check that the ingress edge, not
+just the core, is binding-agnostic; and the portfolio write-up.
