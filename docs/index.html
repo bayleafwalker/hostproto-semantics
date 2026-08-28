@@ -93,12 +93,13 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
 <section>
   <div class="rail">What's being done<small>Status, 28 Aug</small></div>
   <div class="prose">
-    <h2>One host class proven. A second survived the schema test.</h2>
+    <h2>One host class proven, delegated over A2A. A second survived the schema test.</h2>
     <div class="figures">
       <div class="fig"><div class="n">11</div><div class="l">schemas, shared by browser and debugger</div></div>
       <div class="fig"><div class="n ok">36/36</div><div class="l">corpus runs on real WebKitGTK, ×2 variants</div></div>
       <div class="fig"><div class="n ok">6 / 6</div><div class="l">oracle-applicable scenarios equivalent</div></div>
-      <div class="fig"><div class="n">12/12</div><div class="l">wire tests, MCP 2026-07-28</div></div>
+      <div class="fig"><div class="n">13/13</div><div class="l">wire tests, MCP 2026-07-28</div></div>
+      <div class="fig"><div class="n">11/11</div><div class="l">wire tests, A2A 1.0</div></div>
     </div>
     <p>The semantics were first executed under browser names in <a href="https://github.com/bayleafwalker/browser-workbench">browser-workbench</a>: a frozen twelve-scenario corpus run on a deterministic mock, then on a real embedded WebKitGTK engine (twelve scenarios × three repetitions × two profile variants, byte-deterministic), then cross-checked against Playwright/WebKit as an external oracle. Six of twelve scenarios can be posed to the oracle; all six are equivalent, and the other six name the host mechanism the oracle lacks. That milestone is now frozen.</p>
     <p>The generalization lives in three new repositories. <a href="https://github.com/bayleafwalker/hostproto-semantics">hostproto-semantics</a> holds the schemas, the alignment maps from both prior projects, the plan, and the kill gates — nothing runnable. <a href="https://github.com/bayleafwalker/hostproto-mcp-playwright">hostproto-mcp-playwright</a> is the reference adapter: a headless Chromium exposed through MCP 2026-07-28, whose tool schemas are the pinned bundles verbatim and whose every result is validated against them before it leaves the process. <a href="https://github.com/bayleafwalker/hostproto-a2a-worker">hostproto-a2a-worker</a> is the A2A 1.0 host-worker: one Agent Card, one skill, each task projected from a domain run that drives the adapter through many MCP calls.</p>
@@ -137,6 +138,8 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
       <li><code>server/discover</code> returns <code>supportedVersions</code>; server identity rides <code>_meta</code> on every result.</li>
       <li>MCP defines no handle concept — its stateful-tools guidance is non-normative. HostProto's <code>handles</code> schema is needed, not duplicated.</li>
       <li>A gate reporting <em>blocked</em> is also where an infrastructure defect hides if nobody reads the reason. One had, since slice 5.</li>
+      <li>A2A 1.0 enforces a card extension marked <code>required</code>: a caller that does not declare it in <code>A2A-Extensions</code> is refused. The HostProto profile is a contract on the wire, not a convention.</li>
+      <li>A receipt that carries the decision it executed is how an adapter defect surfaced: the worker asked for <code>accept</code> and the receipt said <code>dismiss</code>.</li>
     </ul>
     <h3>Kill gates</h3>
     <p>The generalization stops if any of these becomes true:</p>
@@ -160,7 +163,7 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
     <div class="tablewrap"><table>
       <thead><tr><th>Repo</th><th>Role</th><th>State</th></tr></thead>
       <tbody>
-        <tr><td><a href="https://github.com/bayleafwalker/hostproto-semantics">hostproto-semantics</a></td><td>Canonical schemas, bundles, alignment maps, plan, decisions</td><td>Steps 0–2 done <span class="pill ok">CI green</span></td></tr>
+        <tr><td><a href="https://github.com/bayleafwalker/hostproto-semantics">hostproto-semantics</a></td><td>Canonical schemas, bundles, alignment maps, plan, decisions</td><td>Steps 0–4 done <span class="pill ok">CI green</span></td></tr>
         <tr><td><a href="https://github.com/bayleafwalker/hostproto-mcp-playwright">hostproto-mcp-playwright</a></td><td>Reference adapter, MCP 2026-07-28, Chromium</td><td>13/13 wire tests <span class="pill ok">CI green</span></td></tr>
         <tr><td><a href="https://github.com/bayleafwalker/hostproto-a2a-worker">hostproto-a2a-worker</a></td><td>A2A 1.0 host-worker, one skill, adapter inside</td><td>11/11 wire tests</td></tr>
         <tr><td><a href="https://github.com/bayleafwalker/browser-workbench">browser-workbench</a></td><td>WebKitGTK conformance milestone, slices 1–6; the challenger engine</td><td>Frozen at slice 6 <span class="pill muted">release gate 15/15</span></td></tr>
