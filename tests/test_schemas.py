@@ -108,3 +108,16 @@ class BundleTests(unittest.TestCase):
         deviation = example("dap-sketch", "deviation")
         deviation.pop("raw_ref")
         self.assertTrue(validate(SCHEMA_DIR / "deviation.schema.json", deviation))
+
+
+class BundledOutputTests(unittest.TestCase):
+    def test_committed_bundles_are_fresh(self) -> None:
+        """An adapter pins `bundled/` by digest; a stale file would pin the wrong semantics."""
+        from hostproto.emit_bundles import BUNDLED_DIR, render
+
+        for path in sorted(SCHEMA_DIR.glob("*.schema.json")):
+            name = path.name.replace(".schema.json", "")
+            with self.subTest(name=name):
+                self.assertEqual((BUNDLED_DIR / f"{name}.json").read_text(encoding="utf-8"), render(name))
+        sums = (BUNDLED_DIR / "SHA256SUMS").read_text(encoding="utf-8")
+        self.assertEqual(sums.count("\n"), len(list(SCHEMA_DIR.glob("*.schema.json"))))
