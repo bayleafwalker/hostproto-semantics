@@ -11,16 +11,22 @@ been verified in this repository yet. Each must be confirmed against the
 linked spec section, with the section and revision recorded in
 `DECISIONS.md`, before any HostProto abstraction is deleted on its account.
 
-| Assumed feature | Where it matters | Status |
+| Assumed feature | Where it matters | Status (verified 2026-08-28) |
 | --- | --- | --- |
-| MCP: implicit sessions removed; explicit server-minted handles for cross-request state | handles map 1:1 | unverified |
-| MCP: `server/discover`, per-request capability metadata | capability profile publication | unverified |
-| MCP: `subscriptions/listen` | surface-change notifications | unverified |
-| MCP: elicitation (MRTR) for approval / auth / missing input | recovery → human | unverified |
-| MCP Tasks extension: durable handles, polling, `input_required`, cooperative cancel | one async primitive | unverified |
-| A2A v1: `ListTasks`, `GetTask`, `SubscribeToTask`, `CancelTask`, artifact updates, resubscription | domain-run projection | unverified |
-| A2A v1: profile extensions constraining `DataPart` to a domain schema | `hostproto-work-order/v1` | unverified |
-| A2A v1: signed Agent Cards | worker publication | unverified |
+| MCP: implicit sessions removed; explicit server-minted handles for cross-request state | handles map 1:1 | **verified** — changelog 2026-07-28, major change 1 (SEP-2567); `server/tools` § Stateful Tools. *Nuance:* that section is non-normative and "the protocol has no concept of a state handle" — a handle is an ordinary string argument. HostProto's `handles` schema is therefore needed, not duplicated. |
+| MCP: `server/discover`, per-request capability metadata | capability profile publication | **verified** — major changes 2 and 3 (SEP-2575); capabilities travel in `_meta` per request |
+| MCP: `subscriptions/listen` | surface-change notifications | **verified with a constraint** — major change 4. Opt-in types are `toolsListChanged`, `promptsListChanged`, `resourcesListChanged`, `resourceSubscriptions` only. Host-state change must be modelled as a **resource subscription** on a surface resource; there is no arbitrary event channel. |
+| MCP: elicitation (MRTR) for approval / auth / missing input | recovery → human | **verified** — major changes 7 and 8 (SEP-2322): `resultType: "input_required"`, `inputRequests`, retry with `inputResponses` + `requestState` |
+| MCP Tasks extension: durable handles, polling, `input_required`, cooperative cancel | one async primitive | **verified with differences** — `io.modelcontextprotocol/tasks` (major change 6, SEP-2663): `tasks/get` polling, `tasks/update` for input, `tasks/cancel` cooperative, notifications via `subscriptions/listen`, server may return a task unsolicited. **`tasks/list` was removed** and SSE resumability was removed (major change 9): reconnection is by durable task id only, and *listing* tasks is not MCP's job — it is A2A's or the domain runtime's. |
+| A2A v1: `ListTasks`, `GetTask`, `SubscribeToTask`, `CancelTask`, artifact updates, resubscription | domain-run projection | **verified** — A2A 1.0.0 "what's new": all four operations present (renamed from `tasks/*`), `TaskArtifactUpdateEvent` with `index`, tasks scoped to the authenticated caller |
+| A2A v1: profile extensions constraining message parts to a domain schema | `hostproto-work-order/v1` | **verified** — extensions topic: profile extensions may "narrow the space of allowed values (for example, requiring all messages to use DataParts adhering to a specific schema)"; declared in `AgentCapabilities.extensions[]` with `required: true`. *Nuance:* the 1.0 spec names the container `Part` (text / bytes / structured data); `DataPart` is the older name. |
+| A2A v1: signed Agent Cards | worker publication | **verified** — spec § 8.4, JWS (RFC 7515) over JSON Canonicalization (RFC 8785), `AgentCardSignature` |
+
+Additional findings from the same pass:
+
+- MCP `inputSchema` / `outputSchema` now accept any JSON Schema 2020-12 keyword and `structuredContent` any JSON value (minor change 10, SEP-2106), so `schemas/` can be used verbatim — **but** MCP imposes `$ref` resolution requirements. Cross-file `$ref` by `$id` (as `intent` → `target-ref` here) must be bundled or inlined in tool definitions. Step 1 adds a bundler.
+- MCP `_meta` carries OpenTelemetry `traceparent` / `tracestate` (minor change 2). HostProto evidence refs should carry the trace id so receipts correlate with domain-run traces without a new field of their own.
+- Roots, Sampling, and Logging are deprecated. Nothing here depended on them.
 
 If a feature is thinner than assumed, HostProto keeps that piece and says so.
 
@@ -31,7 +37,8 @@ Map every browser-workbench type onto its HostProto schema
 repository's spec package (`HOST_PROTOCOL_V0`, `CAPABILITY_MODEL`,
 `TEMPORAL_AND_STATE_SEMANTICS`, its four schemas), then onto MCP and A2A. Delete duplicated discovery,
 task, transport, and content abstractions. Deliverable: `schemas/` complete
-with examples and negative tests; the map has no row marked *unmapped*.
+with examples and negative tests; the map has no row marked *unmapped*; a
+bundler that inlines cross-file `$ref` for MCP tool definitions.
 
 ## Step 2 — headless MCP reference adapter (4–5 days)
 

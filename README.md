@@ -39,8 +39,9 @@ conformance backends live elsewhere and are referenced, not vendored:
 
 ## Status
 
-Pre-alignment. Nothing here is verified against MCP 2026-07-28 or A2A v1.0
-yet; `docs/PLAN.md` step 0 is that verification, and it gates step 1.
+Step 0 done (2026-08-28): all eight assumed MCP 2026-07-28 / A2A 1.0.0
+features verified against the specs, with four nuances recorded in
+`docs/PLAN.md` and ADR-0005. Step 1, the alignment pass, is next.
 
 ```sh
 PYTHONPATH=src python3 -m unittest discover -s tests

@@ -47,3 +47,32 @@ feature until its row is marked verified with a spec section and date.
 
 **Consequence.** The alignment pass may keep pieces the plan expected to
 delete. That is the correct outcome if the spec is thinner than assumed.
+
+## ADR-0005: step 0 outcome — nothing is deleted, three things are constrained
+
+**Context.** All eight assumed MCP 2026-07-28 and A2A 1.0.0 features were
+verified against the specifications on 2026-08-28 (`PLAN.md` step 0 table
+carries the citations).
+
+**Decision.**
+
+1. HostProto keeps its `handles` schema. MCP removed sessions but defines no
+   handle concept; its stateful-tools guidance is non-normative and treats a
+   handle as an ordinary string. Opacity, expiry, and writer fencing are
+   HostProto's to specify.
+2. Surface-change notification is expressed as an MCP **resource
+   subscription** on a surface resource, because `subscriptions/listen` admits
+   no other event type. No HostProto event channel is added.
+3. Task *listing* is not projected through MCP (`tasks/list` was removed).
+   `ListTasks` is A2A's, backed by the domain runtime. This sharpens the
+   responsibility split rather than weakening it.
+4. Schemas are used verbatim in MCP tool definitions, bundled to satisfy MCP's
+   `$ref` resolution rules. The canonical files keep cross-file `$ref`.
+
+**Consequence.** The alignment pass (step 1) deletes no HostProto
+abstraction. The plan's assumption that duplicated discovery, task, transport,
+and content abstractions exist to be deleted was wrong in one direction: there
+were none to delete because browser-workbench never built them. What remains
+is renaming and de-browsering.
+
+**Guard.** Verification is dated. A later spec revision re-opens step 0.
