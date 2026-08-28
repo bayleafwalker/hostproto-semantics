@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="HostProto: typed, evidence-bearing interaction with stateful hosts — what it is, what is being done, and how.">
+<title>HostProto</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#F7F9FB;--surface:#FFFFFF;--ink:#17212B;--muted:#5B6B7A;--rule:#D6DEE5;--accent:#2447C9;--accent-ink:#FFFFFF;
+  --ok:#1E8A5B;--warn:#B7791F;--code-bg:#EEF2F6;
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;--body:"Source Serif 4",Georgia,"Times New Roman",serif;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#0F1519;--surface:#161E25;--ink:#E6EDF3;--muted:#98A6B3;--rule:#2A3640;--accent:#8FA8FF;--accent-ink:#0F1519;--ok:#4CC38A;--warn:#E0A84A;--code-bg:#1B252E}}
+:root[data-theme="dark"]{--paper:#0F1519;--surface:#161E25;--ink:#E6EDF3;--muted:#98A6B3;--rule:#2A3640;--accent:#8FA8FF;--accent-ink:#0F1519;--ok:#4CC38A;--warn:#E0A84A;--code-bg:#1B252E}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1.0625rem;line-height:1.6;font-optical-sizing:auto}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:.15em}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:3rem 1.5rem 5rem}
+header.masthead{display:grid;grid-template-columns:1fr;gap:1.25rem;padding-bottom:2rem;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:1.25rem;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(2.6rem,6vw,4.6rem);line-height:.98;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.thesis{font-size:1.35rem;line-height:1.4;max-width:34ch;margin:0;text-wrap:balance}
+.thesis b{font-weight:600}
+section{display:grid;grid-template-columns:1fr;gap:.75rem 2.5rem;padding:2.75rem 0;border-bottom:1px solid var(--rule)}
+@media (min-width:820px){section{grid-template-columns:170px minmax(0,1fr)}}
+.rail{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:.55rem}
+.rail small{display:block;text-transform:none;letter-spacing:0;color:var(--muted);margin-top:.35rem;opacity:.8}
+h2{font-family:var(--display);font-weight:600;font-size:1.85rem;line-height:1.1;letter-spacing:-.01em;margin:0 0 .75rem;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:1.5rem 0 .4rem}
+.prose{max-width:68ch}
+.prose p{margin:0 0 1rem}
+.prose ul{padding-left:1.2rem;margin:0 0 1rem}
+.prose li{margin-bottom:.35rem}
+code,.mono{font-family:var(--mono);font-size:.86em}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:3px}
+table{border-collapse:collapse;width:100%;font-size:.95rem;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;max-width:100%}
+th,td{text-align:left;padding:.55rem .75rem;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td:first-child{font-family:var(--mono);font-size:.85rem;white-space:nowrap}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.card{background:var(--surface);border:1px solid var(--rule);padding:1rem 1.1rem}
+.card h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 .5rem;font-weight:600}
+.card p{margin:0;font-size:.98rem}
+.receipt{background:var(--surface);border:1px solid var(--rule);font-family:var(--mono);font-size:.8rem;line-height:1.55;padding:1rem 1.1rem;overflow-x:auto;white-space:pre;color:var(--ink)}
+.receipt .k{color:var(--muted)}.receipt .ok{color:var(--ok)}.receipt .hl{color:var(--accent)}
+.figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin:0 0 1.25rem}
+.fig{border-top:2px solid var(--ink);padding-top:.5rem}
+.fig .n{font-family:var(--display);font-weight:700;font-size:2.2rem;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.fig .l{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:.35rem}
+.fig .n.ok{color:var(--ok)}
+.timeline{list-style:none;padding:0;margin:0;border-left:1px solid var(--rule)}
+.timeline li{position:relative;padding:0 0 1.1rem 1.25rem}
+.timeline li::before{content:"";position:absolute;left:-4px;top:.55rem;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.timeline .when{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.06em}
+.timeline p{margin:.1rem 0 0}
+.pill{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:.15em .5em;border:1px solid currentColor;border-radius:2px;vertical-align:middle;margin-left:.4rem}
+.pill.ok{color:var(--ok)}.pill.warn{color:var(--warn)}.pill.muted{color:var(--muted)}
+.gates{counter-reset:none;padding-left:1.2rem;margin:0}
+.gates li{margin-bottom:.4rem}
+footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--muted);display:flex;gap:1.5rem;flex-wrap:wrap}
+@media (prefers-reduced-motion:no-preference){.fig .n{transition:color .2s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="masthead">
+  <div class="kicker"><span>HostProto</span><span>Project summary</span><span>28 Aug 2026</span></div>
+  <h1>Typed, evidence-bearing interaction with <em>stateful hosts</em></h1>
+  <p class="thesis">A browser context, a debug session, an interactive process: hosts you must <b>observe</b> before you <b>act</b>, where the act changes the next observation, and where a reference you hold may already be stale. HostProto is the small set of semantics that makes an agent's work on such hosts <b>checkable after the fact</b>.</p>
+</header>
+
+<section>
+  <div class="rail">The point<small>Why this exists</small></div>
+  <div class="prose">
+    <h2>Agents act on hosts. Nobody can currently prove what they did.</h2>
+    <p>MCP gives an agent tools. A2A lets agents delegate work to each other. Neither says what it means to click something that has since moved, to read a page that has since navigated, or to claim an effect that nobody observed. Every host adapter reinvents those rules privately, and the evidence an agent leaves behind is whatever it felt like logging.</p>
+    <p>HostProto's claim is that <b>nine semantics</b> cover every stateful host, without becoming host-specific: opaque expiring <b>handles</b>; <b>revisioned</b> observations with a cursor into an ordered event stream; <b>target references scoped to a revision</b> and rejected before the host is touched when it has moved; declared <b>preconditions</b>; declared <b>intent</b>; <b>receipts</b> that separate <i>attempted</i>, <i>accepted</i>, <i>executed</i> and <i>verified</i>; <b>content-addressed evidence</b>; <b>capability profiles earned by execution</b>, never by declaration; and <b>recovery</b> as named states rather than exceptions.</p>
+    <p>It is deliberately <b>not</b> a third wire protocol. MCP carries the primitives, A2A carries delegated work, HostProto is the semantics both carry — canonical JSON Schemas used verbatim as MCP tool schemas and as an A2A profile extension. Adding a scheduler, a task store, a transport, or a universal <code>Task</code> type to HostProto is defined as failure.</p>
+    <div class="split">
+      <div class="card"><h4>MCP owns</h4><p>Discoverable tools with typed schemas, structured results, resources and subscriptions, server-minted handles, elicitation.</p></div>
+      <div class="card"><h4>A2A owns</h4><p>Agent discovery, coarse skills, delegated tasks, streaming, interruption, artifacts.</p></div>
+      <div class="card"><h4>HostProto owns</h4><p>Handles, revision and freshness, target identity and invalidation, preconditions, intent, receipts, evidence, capability truth, recovery.</p></div>
+      <div class="card"><h4>The domain runtime owns</h4><p>Execution lifecycle: claims, retries, cancellation, terminality. Correlated with MCP and A2A tasks, never merged.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="rail">What's being done<small>Status, 28 Aug</small></div>
+  <div class="prose">
+    <h2>One host class proven. A second is the test.</h2>
+    <div class="figures">
+      <div class="fig"><div class="n">11</div><div class="l">canonical schemas</div></div>
+      <div class="fig"><div class="n ok">36/36</div><div class="l">corpus runs on real WebKitGTK, ×2 variants</div></div>
+      <div class="fig"><div class="n ok">6 / 6</div><div class="l">oracle-applicable scenarios equivalent</div></div>
+      <div class="fig"><div class="n">12/12</div><div class="l">wire tests, MCP 2026-07-28</div></div>
+    </div>
+    <p>The semantics were first executed under browser names in <a href="https://github.com/bayleafwalker/browser-workbench">browser-workbench</a>: a frozen twelve-scenario corpus run on a deterministic mock, then on a real embedded WebKitGTK engine (twelve scenarios × three repetitions × two profile variants, byte-deterministic), then cross-checked against Playwright/WebKit as an external oracle. Six of twelve scenarios can be posed to the oracle; all six are equivalent, and the other six name the host mechanism the oracle lacks. That milestone is now frozen.</p>
+    <p>The generalization lives in two new repositories. <a href="https://github.com/bayleafwalker/hostproto-semantics">hostproto-semantics</a> holds the schemas, the alignment maps from both prior projects, the plan, and the kill gates — nothing runnable. <a href="https://github.com/bayleafwalker/hostproto-mcp-playwright">hostproto-mcp-playwright</a> is the reference adapter: a headless Chromium exposed through MCP 2026-07-28, whose tool schemas are the pinned bundles verbatim and whose every result is validated against them before it leaves the process.</p>
+    <h3>The track</h3>
+    <ul class="timeline">
+      <li><span class="when">Step 0 · done</span><p>Verify the eight assumed MCP 2026-07-28 / A2A 1.0.0 features against the specs. All eight held; four nuances recorded. Nothing had to be deleted.</p></li>
+      <li><span class="when">Step 1 · done</span><p>Align every browser-workbench and HostProto 0.1.0 type to a schema. Four semantics the lineage had lost were recovered: operation <code>outcome</code> including <code>unknown</code>, typed suppression records, surface lifecycle, capability degradation.</p></li>
+      <li><span class="when">Step 2 · done</span><p>Playwright reference adapter on the wire. Two corrections to step 0 came back from real traffic.</p></li>
+      <li><span class="when">Step 3 · next</span><p>The DAP schema spike — a debug session on paper, no runtime. Frames as revision-scoped targets that invalidate on resume. This is where the thesis can fail.</p></li>
+      <li><span class="when">Steps 4–6</span><p>A2A host-worker with one skill; DAP runtime only if step 3 needed no envelope change; native WebKitGTK retained as the challenger.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="rail">How it's being done<small>Method</small></div>
+  <div class="prose">
+    <h2>Every claim has a denominator, and every verification is earned.</h2>
+    <p>The working rule across all three repositories: <b>no quiet denominator shrinkage.</b> A scenario is passed, failed, blocked, or inapplicable, and a report always lists all twelve. Suppressions in a comparison are declared and echoed into the evidence. A capability is <code>runtime</code>-verified only by an operation that completed in a passed run — the mock backend earns it the same way the real engine does.</p>
+    <p>The adapter never copies a schema. It pins a commit of the semantics repository and a SHA-256 per bundle, verifies on fetch and again on load, and refuses a mismatch. There are no hand-written TypeScript interfaces for HostProto types. Tests are wire-level: a real client pinned to 2026-07-28, a real stdio server, a real browser, a loopback fixture.</p>
+    <p>This is what one receipt looks like when a target from an earlier revision is used after the page navigated. The host was never invoked; the error says so.</p>
+<pre class="receipt"><span class="k">→ hostproto_surface_act</span>  kind: click  target: target-1 @ revision 2
+<span class="k">← structuredContent (isError)</span>
+{
+  "schema_version": "hostproto.error/v1",
+  "code": <span class="hl">"target_invalidated"</span>,
+  "message": "target belongs to an earlier revision",
+  "host_invoked": <span class="ok">false</span>,
+  "data": { "target_id": "target-1", "target_revision": 2, "surface_revision": 3 }
+}</pre>
+    <h3>What the wire taught us that no changelog said</h3>
+    <ul>
+      <li>On the 2026-07-28 era <code>resources/subscribe</code> no longer exists; a resource subscription is a URI array in the <code>subscriptions/listen</code> filter.</li>
+      <li><code>server/discover</code> returns <code>supportedVersions</code>; server identity rides <code>_meta</code> on every result.</li>
+      <li>MCP defines no handle concept — its stateful-tools guidance is non-normative. HostProto's <code>handles</code> schema is needed, not duplicated.</li>
+      <li>A gate reporting <em>blocked</em> is also where an infrastructure defect hides if nobody reads the reason. One had, since slice 5.</li>
+    </ul>
+    <h3>Kill gates</h3>
+    <p>The generalization stops if any of these becomes true:</p>
+    <ol class="gates">
+      <li>browser and debugger need different core envelopes;</li>
+      <li>the shared schema degenerates into arbitrary JSON;</li>
+      <li>HostProto acquires a scheduler, durable task store, or transport;</li>
+      <li>individual clicks or debugger steps become A2A skills;</li>
+      <li>every MCP call gets wrapped in an A2A task;</li>
+      <li>adapter-specific escape hatches become normal;</li>
+      <li>observation revision cannot be expressed uniformly across hosts;</li>
+      <li>runtime verification stops being earnable per adapter.</li>
+    </ol>
+    <p>Gates 2 and 6 were tested by step 2 and did not fire. Gates 1, 7 and 8 are what step 3 exists to test.</p>
+  </div>
+</section>
+
+<section>
+  <div class="rail">Repositories<small>All public</small></div>
+  <div class="prose">
+    <div class="tablewrap"><table>
+      <thead><tr><th>Repo</th><th>Role</th><th>State</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://github.com/bayleafwalker/hostproto-semantics">hostproto-semantics</a></td><td>Canonical schemas, bundles, alignment maps, plan, decisions</td><td>Steps 0–2 done <span class="pill ok">CI green</span></td></tr>
+        <tr><td><a href="https://github.com/bayleafwalker/hostproto-mcp-playwright">hostproto-mcp-playwright</a></td><td>Reference adapter, MCP 2026-07-28, Chromium</td><td>12/12 wire tests <span class="pill ok">CI green</span></td></tr>
+        <tr><td><a href="https://github.com/bayleafwalker/browser-workbench">browser-workbench</a></td><td>WebKitGTK conformance milestone, slices 1–6; the challenger engine</td><td>Frozen at slice 6 <span class="pill muted">release gate 15/15</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<footer><span>hostproto-semantics · docs/HANDOFF-2026-08-28.md</span><span>MIT</span></footer>
+</div>
+</body>
+</html>
