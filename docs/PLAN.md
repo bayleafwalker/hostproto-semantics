@@ -117,11 +117,11 @@ Addendum, same day — gate 1 tested late: a second, unrelated debugger,
 (Delve 1.27.1, Go). A file-for-file copy of the debugpy adapter needed a TCP
 connect, a Go launch config, and stdio normalization; `observe`, `act`,
 `await`, `recovery` and the ledger were untouched. Thirteen wire tests. The
-spike's `verified: false` case *is* reachable on Delve. One toolchain-level
-finding: Delve acknowledged a `setVariable` and read it back, yet the
-debuggee ran with the old value; `verified` is now earned by read-back in
-both adapters, and the program's own later output is what caught the lie
-(ADR-0011).
+spike's `verified: false` case *is* reachable on Delve. `verified` on
+`set_variable` is now earned by read-back in both adapters. A first-day
+claim that Delve had ignored a write was retracted the same day: an
+off-by-one in the fixture, exposed by the program's own output kept as
+evidence (ADR-0011).
 
 ## Step 6 — native WebKitGTK conformance
 

@@ -217,13 +217,19 @@ one envelope. Three fixes found on Delve were folded back into debugpy,
 which is the shape a shared `hostproto-dap-core` would take if a third
 adapter appears; it is not extracted yet because two is not a pattern.
 
-**Finding worth stating on its own.** Delve acknowledged a `setVariable`,
-`evaluate` read the new value back, and the debuggee still ran with the old
-one. A receipt can only be as honest as the observations available at the
-time; `verified` now means "an independent read agreed", and the deviation
-appears where it can — in the next observation of the program's output.
-This is the strongest argument yet for keeping `executed` and `verified`
-apart, and for content-addressed evidence that outlives the receipt.
+**Finding, retracted the same day.** A first version of this ADR claimed
+Delve acknowledged a `setVariable` the debuggee never saw, and that `next`
+was not pre-empted by a nested breakpoint. Both came from an off-by-one in
+the Go fixture's line comments: the "breakpoint inside the call" sat on a
+closing brace (Delve reported `verified: false` and the receipt carried
+the deviation, unread), and the "stop before the call" was the line after
+it. With correct lines Delve behaves exactly like debugpy on both the
+development toolchain and release Go 1.25.1. What survives is the
+mechanism that exposed the error — the program's own output kept as
+evidence beside the receipt — and the read-back that now earns `verified`
+on `set_variable` in both adapters. The retraction is recorded rather than
+rewritten because the failure mode is the one HostProto exists to catch,
+and it caught its own author.
 
-**Guard.** Re-check item 6 of the Delve ADR-0002 on a release Go
-toolchain; the development host runs an experimental `nodwarf5` build.
+**Guard.** Every receipt deviation in a test's *setup* is asserted, not
+just those in the step under test.
