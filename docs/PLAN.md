@@ -112,6 +112,17 @@ not fire at runtime (ADR-0010). Six debugpy wire facts are recorded in the
 adapter's `docs/DECISIONS.md`; one spike case (`verified: false` at set
 time) is not reachable on debugpy, which binds eagerly and relocates.
 
+Addendum, same day — gate 1 tested late: a second, unrelated debugger,
+[hostproto-dap-delve](https://github.com/bayleafwalker/hostproto-dap-delve)
+(Delve 1.27.1, Go). A file-for-file copy of the debugpy adapter needed a TCP
+connect, a Go launch config, and stdio normalization; `observe`, `act`,
+`await`, `recovery` and the ledger were untouched. Thirteen wire tests. The
+spike's `verified: false` case *is* reachable on Delve. One toolchain-level
+finding: Delve acknowledged a `setVariable` and read it back, yet the
+debuggee ran with the old value; `verified` is now earned by read-back in
+both adapters, and the program's own later output is what caught the lie
+(ADR-0011).
+
 ## Step 6 — native WebKitGTK conformance
 
 Retained while the human-and-agent Linux workbench is a product goal. No

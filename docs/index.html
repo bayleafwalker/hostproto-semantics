@@ -93,17 +93,18 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
 <section>
   <div class="rail">What's being done<small>Status, 28 Aug</small></div>
   <div class="prose">
-    <h2>Two host classes on one envelope, delegated over A2A.</h2>
+    <h2>A browser and two debuggers on one envelope, delegated over A2A.</h2>
     <div class="figures">
       <div class="fig"><div class="n">11</div><div class="l">schemas, shared by browser and debugger</div></div>
       <div class="fig"><div class="n ok">36/36</div><div class="l">corpus runs on real WebKitGTK, ×2 variants</div></div>
       <div class="fig"><div class="n ok">6 / 6</div><div class="l">oracle-applicable scenarios equivalent</div></div>
       <div class="fig"><div class="n">13/13</div><div class="l">wire tests, MCP 2026-07-28</div></div>
       <div class="fig"><div class="n">11/11</div><div class="l">wire tests, A2A 1.0</div></div>
-      <div class="fig"><div class="n">14/14</div><div class="l">wire tests, DAP on debugpy</div></div>
+      <div class="fig"><div class="n">15/15</div><div class="l">wire tests, DAP on debugpy</div></div>
+      <div class="fig"><div class="n">13/13</div><div class="l">wire tests, DAP on Delve</div></div>
     </div>
     <p>The semantics were first executed under browser names in <a href="https://github.com/bayleafwalker/browser-workbench">browser-workbench</a>: a frozen twelve-scenario corpus run on a deterministic mock, then on a real embedded WebKitGTK engine (twelve scenarios × three repetitions × two profile variants, byte-deterministic), then cross-checked against Playwright/WebKit as an external oracle. Six of twelve scenarios can be posed to the oracle; all six are equivalent, and the other six name the host mechanism the oracle lacks. That milestone is now frozen.</p>
-    <p>The generalization lives in four new repositories. <a href="https://github.com/bayleafwalker/hostproto-semantics">hostproto-semantics</a> holds the schemas, the alignment maps from both prior projects, the plan, and the kill gates — nothing runnable. <a href="https://github.com/bayleafwalker/hostproto-mcp-playwright">hostproto-mcp-playwright</a> is the reference adapter: a headless Chromium exposed through MCP 2026-07-28, whose tool schemas are the pinned bundles verbatim and whose every result is validated against them before it leaves the process. <a href="https://github.com/bayleafwalker/hostproto-a2a-worker">hostproto-a2a-worker</a> is the A2A 1.0 host-worker: one Agent Card, one skill, each task projected from a domain run that drives the adapter through many MCP calls. <a href="https://github.com/bayleafwalker/hostproto-dap-debugpy">hostproto-dap-debugpy</a> is the second host class: a debugpy session behind the same eleven schemas.</p>
+    <p>The generalization lives in five new repositories. <a href="https://github.com/bayleafwalker/hostproto-semantics">hostproto-semantics</a> holds the schemas, the alignment maps from both prior projects, the plan, and the kill gates — nothing runnable. <a href="https://github.com/bayleafwalker/hostproto-mcp-playwright">hostproto-mcp-playwright</a> is the reference adapter: a headless Chromium exposed through MCP 2026-07-28, whose tool schemas are the pinned bundles verbatim and whose every result is validated against them before it leaves the process. <a href="https://github.com/bayleafwalker/hostproto-a2a-worker">hostproto-a2a-worker</a> is the A2A 1.0 host-worker: one Agent Card, one skill, each task projected from a domain run that drives the adapter through many MCP calls. <a href="https://github.com/bayleafwalker/hostproto-dap-debugpy">hostproto-dap-debugpy</a> is the second host class: a debugpy session behind the same eleven schemas; <a href="https://github.com/bayleafwalker/hostproto-dap-delve">hostproto-dap-delve</a> is the same adapter shape on a Go debugger, the late test of kill gate 1.</p>
     <h3>The track</h3>
     <ul class="timeline">
       <li><span class="when">Step 0 · done</span><p>Verify the eight assumed MCP 2026-07-28 / A2A 1.0.0 features against the specs. All eight held; four nuances recorded. Nothing had to be deleted.</p></li>
@@ -112,6 +113,7 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
       <li><span class="when">Step 3 · done</span><p>The DAP schema spike — a debug session in the unchanged schemas, no runtime. Frames and variables as revision-scoped targets that invalidate on resume; <code>Breakpoint.verified</code> as the receipt's oracle. Twenty-five instances validate; kill gates 1, 7 and 8 did not fire. One rule generalized: the cursor is always host-assigned.</p></li>
       <li><span class="when">Step 4 · done</span><p>A2A host-worker: one Agent Card, one skill, tasks projected from domain runs, the MCP adapter inside. The profile extension is enforced by A2A on the wire; a missing <code>url</code> and a script dialog's <code>decision_token</code> are both <code>INPUT_REQUIRED</code>; receipts, errors and recoveries ride A2A verbatim; screenshots are content-addressed artifacts. Kill gates 3, 4 and 5 did not fire. Eleven wire tests, real Chromium.</p></li>
       <li><span class="when">Step 5 · done</span><p>DAP runtime on debugpy, same eleven bundles unchanged. The spike's rule proven live: a <code>variablesReference</code> from before a resume is refused before anything is sent. Revision per thread on every stop and resume; a resume that never stops is <code>outcome: unknown</code>; frames while running are omitted, not lost; <code>runInTerminal</code> is a decision token; recovery carries the raw DAP log as evidence. Fourteen wire tests. Kill gates 1, 6 and 8 held at runtime.</p></li>
+      <li><span class="when">Gate 1 · late test</span><p>A second, unrelated debugger: Delve (Go). A file-for-file copy of the debugpy adapter needed a TCP connect, a Go launch and one stdio normalization; observe, act, await, recovery and the capability ledger were untouched. Thirteen wire tests. Delve reports unbindable breakpoints honestly, so the spike's <code>verified: false</code> case is reachable there — and it acknowledged a variable write the program never saw, which is why <code>verified</code> is now earned by an independent read in both adapters.</p></li>
       <li><span class="when">Step 6 · optional</span><p>Native WebKitGTK retained as the challenger.</p></li>
     </ul>
   </div>
@@ -142,6 +144,7 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
       <li>A2A 1.0 enforces a card extension marked <code>required</code>: a caller that does not declare it in <code>A2A-Extensions</code> is refused. The HostProto profile is a contract on the wire, not a convention.</li>
       <li>A receipt that carries the decision it executed is how an adapter defect surfaced: the worker asked for <code>accept</code> and the receipt said <code>dismiss</code>.</li>
       <li>debugpy asks the client to run the debuggee <em>before</em> it reports initialized, binds every breakpoint eagerly (relocating out-of-range lines), and chunks one <code>print</code> into several output events. None of it needed a schema; all of it needed a deviation or a lifecycle the schema already had.</li>
+      <li>Delve acknowledged a <code>setVariable</code> and read the new value back, yet the debuggee ran with the old one. A receipt is only as honest as the observations available when it is written — which is why <code>executed</code> and <code>verified</code> are separate, and why evidence outlives receipts.</li>
     </ul>
     <h3>Kill gates</h3>
     <p>The generalization stops if any of these becomes true:</p>
@@ -168,7 +171,8 @@ footer{padding-top:2rem;font-family:var(--mono);font-size:.75rem;color:var(--mut
         <tr><td><a href="https://github.com/bayleafwalker/hostproto-semantics">hostproto-semantics</a></td><td>Canonical schemas, bundles, alignment maps, plan, decisions</td><td>Steps 0–5 done <span class="pill ok">CI green</span></td></tr>
         <tr><td><a href="https://github.com/bayleafwalker/hostproto-mcp-playwright">hostproto-mcp-playwright</a></td><td>Reference adapter, MCP 2026-07-28, Chromium</td><td>13/13 wire tests <span class="pill ok">CI green</span></td></tr>
         <tr><td><a href="https://github.com/bayleafwalker/hostproto-a2a-worker">hostproto-a2a-worker</a></td><td>A2A 1.0 host-worker, one skill, adapter inside</td><td>11/11 wire tests <span class="pill ok">CI green</span></td></tr>
-        <tr><td><a href="https://github.com/bayleafwalker/hostproto-dap-debugpy">hostproto-dap-debugpy</a></td><td>DAP adapter, debugpy, MCP 2026-07-28</td><td>14/14 wire tests</td></tr>
+        <tr><td><a href="https://github.com/bayleafwalker/hostproto-dap-debugpy">hostproto-dap-debugpy</a></td><td>DAP adapter, debugpy, MCP 2026-07-28</td><td>15/15 wire tests <span class="pill ok">CI green</span></td></tr>
+        <tr><td><a href="https://github.com/bayleafwalker/hostproto-dap-delve">hostproto-dap-delve</a></td><td>DAP adapter, Delve (Go), MCP 2026-07-28</td><td>13/13 wire tests</td></tr>
         <tr><td><a href="https://github.com/bayleafwalker/browser-workbench">browser-workbench</a></td><td>WebKitGTK conformance milestone, slices 1–6; the challenger engine</td><td>Frozen at slice 6 <span class="pill muted">release gate 15/15</span></td></tr>
       </tbody>
     </table></div>

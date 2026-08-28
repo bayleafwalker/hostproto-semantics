@@ -197,3 +197,33 @@ spike expected.
 **Guard.** Step 6 (native WebKitGTK) stays optional. The next question is
 not a third host class but a second debugger: if a non-debugpy adapter needs
 a different envelope, gate 1 fires late.
+
+## ADR-0011: gate 1 tested late — a second debugger, same envelope
+
+**Context.** ADR-0010 named the next real test: a non-debugpy DAP adapter.
+hostproto-dap-delve was built the same day as a copy of the debugpy adapter.
+
+**Decision.** No schema change. The measured diff is transport (`connect`
+beside `spawn`), launch (`go build` inside `launch`, cwd = module),
+and one normalization (debuggee stdio arrives on the adapter's stdio, not
+as DAP `output`; it is folded into the same event stream and the profile
+says `provider: host, semantics: normalized` for `observe.output`). Two
+adapter differences went the other way from debugpy without touching a
+schema: Delve reports `verified: false` honestly, and `next` is not
+pre-empted by a nested breakpoint — the receipt records agreement.
+
+**Consequence.** Three host classes counting the browser, two debuggers,
+one envelope. Three fixes found on Delve were folded back into debugpy,
+which is the shape a shared `hostproto-dap-core` would take if a third
+adapter appears; it is not extracted yet because two is not a pattern.
+
+**Finding worth stating on its own.** Delve acknowledged a `setVariable`,
+`evaluate` read the new value back, and the debuggee still ran with the old
+one. A receipt can only be as honest as the observations available at the
+time; `verified` now means "an independent read agreed", and the deviation
+appears where it can — in the next observation of the program's output.
+This is the strongest argument yet for keeping `executed` and `verified`
+apart, and for content-addressed evidence that outlives the receipt.
+
+**Guard.** Re-check item 6 of the Delve ADR-0002 on a release Go
+toolchain; the development host runs an experimental `nodwarf5` build.

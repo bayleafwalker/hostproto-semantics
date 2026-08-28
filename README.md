@@ -52,7 +52,9 @@ kill gates 1, 7, 8 (ADR-0008). Step 4 done: the A2A host-worker is
 [hostproto-a2a-worker](https://github.com/bayleafwalker/hostproto-a2a-worker)
 (ADR-0009); gates 3, 4, 5 did not fire. Step 5 done: the DAP runtime is
 [hostproto-dap-debugpy](https://github.com/bayleafwalker/hostproto-dap-debugpy)
-(ADR-0010); gates 1, 6, 8 held at runtime. Step 6, native WebKitGTK as the
+(ADR-0010); gates 1, 6, 8 held at runtime. Gate 1 was then tested late with a
+second debugger, [hostproto-dap-delve](https://github.com/bayleafwalker/hostproto-dap-delve)
+(ADR-0011): same envelope, no change. Step 6, native WebKitGTK as the
 challenger, remains optional.
 
 ```sh
