@@ -22,7 +22,7 @@ jobs:
           for lane in ("browser", "dap-sketch"):
               for p in (root / "examples" / lane).glob("*.json"):
                   if p.name == "README.json": continue
-                  schema = json.loads((root / "schemas" / f"{p.stem}.schema.json").read_text())
+                  schema = json.loads((root / "schemas" / f"{p.stem.split('-unknown')[0]}.schema.json").read_text())
                   Draft202012Validator(schema, registry=registry).validate(json.loads(p.read_text())); n += 1
           print("validated", n, "examples with jsonschema")
           PY
