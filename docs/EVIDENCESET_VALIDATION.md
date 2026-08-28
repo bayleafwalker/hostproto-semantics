@@ -181,3 +181,16 @@ by the correlator) and which action an error belongs to (the intent's
 Not yet done for step 4: the same traffic from a second debugger binding
 (Delve) and an A2A-carried session, to check that the ingress edge, not
 just the core, is binding-agnostic; and the portfolio write-up.
+
+## Step 4 record — 2026-08-28
+
+Delve (`hostproto-dap-delve` b3e9006) produced the same 14-call shape as
+debugpy and ran through the identical correlator. The A2A worker
+(`hostproto-a2a-worker` 97a7b7c) produced a 27-record run — five receipts
+in status updates, one `INPUT_REQUIRED` decision token answered over A2A,
+thirteen observations and three evidence refs in artifacts — through the
+unchanged session loader. vuoro `a3aadb8`, 24 tests.
+
+**Verdict: promote.** ADR-0014 records the evidence and the six
+compatibility rules derived from consumer need. Housekeeping's deferred
+item — `$id` under `schemas.vuoro.cloud/hostproto/v1/` — is now authorised.

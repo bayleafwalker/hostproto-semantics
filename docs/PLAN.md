@@ -156,3 +156,7 @@ zero profile/adapter/host-class checks in the core reducer and decision
 path, plus one avoided blind rerun, one triggered reacquisition, one
 reconciled uncertain outcome. Promote or freeze; the portfolio write-up
 takes the verdict as its last section either way.
+
+Outcome (2026-08-28): **promoted** (ADR-0014). Criterion held on real
+Chromium, debugpy, Delve and A2A-carried traffic; six compatibility rules
+derived from what the consumer needed. Write-up: `PORTFOLIO.md`.

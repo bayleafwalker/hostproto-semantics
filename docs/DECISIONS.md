@@ -299,3 +299,70 @@ effect-intent projections are advisory evidence.
 are derived in step 7.4 from what the consumer needed. Valuation is reduced
 to two figures: internal utility (3/10 → up to 8/10) and portfolio evidence
 (8/10 → 9/10 on either branch).
+
+## ADR-0014: step 7 verdict — promoted as the reference host-interaction evidence profile
+
+**Context.** ADR-0013 set the binding criterion: zero checks on profile
+name, adapter kind or host class in the core EvidenceSet reducer and
+decision path, plus one avoided blind rerun, one triggered reacquisition
+and one reconciled uncertain outcome, on real traffic.
+
+**Evidence.** `vuoro/packages/vuoro-evidence` (a3aadb8, 24 tests, 384 in
+the workspace). `tests/test_boundary.py` scans `core/` for any
+profile/adapter/host vocabulary and forbids importing `ingress/`; it passes,
+and it caught two docstrings on the way. Real traffic recorded by
+`scripts/record-session.mts` in four repos — Chromium (79f72a5), debugpy
+(c5f5b97), Delve (b3e9006), and an A2A-carried run through the worker
+(97a7b7c) — replayed through one ingress into one reducer alongside a
+2026-08-08 outctl capture manifest:
+
+| Required | Observed |
+| --- | --- |
+| Avoided blind rerun | real click completed → `ACCEPT`; capture inside its window → `ACCEPT`; five A2A receipts → `ACCEPT` |
+| Triggered reacquisition | real stale click/frame refused with `host_invoked:false` → `REACQUIRE`, grant `unused`; windowed receipt past `valid_until` → `EvidenceExpired` |
+| Reconciled uncertain outcome | real `outcome:unknown` continue (debugpy and Delve) → `uncertain_use`, `RECONCILE(requires_observation)`; next real observation confirms → `USED`/`ACCEPT`; a later contradicting observation → `REJECT` |
+
+The debugpy correlator ran unchanged on Delve; the MCP session loader ran
+unchanged on the A2A run (receipts in status updates, observations and
+evidence refs in artifacts). One ingress fix was needed during step 7.4 —
+`evidence-ref/v1` had no branch in the loader — and it was at the edge.
+
+**Decision.** Promote. HostProto is the reference ingress format for
+host-interaction claims and effect-receipt evidence within a Vuoro
+EvidenceSet (the ADR-0013 boundary, unchanged). Compatibility rules are
+derived from what the consumer needed, and only that:
+
+1. **Correlation is by `action_id`, and an error must be delivered in reply
+   to the intent it refuses.** `error/v1` carries no `action_id`; the
+   consumer took it from the call log. On MCP this pairing is the call; on
+   A2A the worker must keep it. A future minor may add an optional
+   `action_id` to `error/v1`; nothing may depend on it before then.
+2. **Freshness is `(surface, revision)` and nothing else.** The consumer
+   used no other field for staleness. Revision must remain monotonic per
+   surface (kill gate 7 restated as a compatibility rule).
+3. **`outcome` is interpreted as: `completed` → effect happened; `failed`,
+   `stopped`, `superseded` → host was invoked, effect did not stand (grant
+   *used*); `unknown` → uncertain (grant *uncertain-use*, no replay without
+   an observation).** `attempted:false` or `accepted:false` → nothing was
+   invoked (grant *unused*).
+4. **Observation confirmation is a consumer-side predicate over
+   `observation.data`.** `receipt.state_after` could not be compared to an
+   observation directly because its digest algorithm is the adapter's. Until
+   an adapter declares the algorithm in its capability profile, consumers
+   must not compare `state_*` digests across objects.
+5. **`evidence-ref.ref` is the content address.** The consumer used it as
+   the item digest; adapters must keep it `sha256:` over the bytes.
+6. **Decision tokens and their resolutions are not evidence.** The A2A
+   decision message never became an item; only the receipt of its effect
+   did. No HostProto object may carry a `Decision`.
+
+**Consequence.** `hostproto-semantics` is canonical at `v0.1.0`; the `$id`
+move to `schemas.vuoro.cloud/hostproto/v1/` is now authorised (the promote
+branch of step 7.1). Rule 4 is a debt: the capability profile should name
+the state-digest algorithm in the next minor. `vuoro-evidence` is the first
+consumer and its boundary test is the standing enforcement of gate 2 from
+the consumer's side.
+
+**Guard.** A change to `core/` in `vuoro-evidence` that needs host
+vocabulary is a HostProto semantics gap and comes back here as an ADR, not
+as a branch in the reducer.
