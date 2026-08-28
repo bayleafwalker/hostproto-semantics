@@ -1,5 +1,7 @@
 # HostProto
 
+Project page: https://bayleafwalker.github.io/hostproto-semantics/
+
 Typed, evidence-bearing interaction with stateful hosts.
 
 > HostProto defines how an agent observes and acts on a stateful host — a
