@@ -195,3 +195,39 @@ unchanged session loader. vuoro `a3aadb8`, 24 tests.
 compatibility rules derived from consumer need. The `$id` move to
 `schemas.vuoro.cloud/hostproto/v1/` is no longer blocked but is deferred
 until a consumer outside these repos needs the Vuoro identity (ADR-0014).
+
+## If the stack moves to vuoro.cloud — what HostProto has to do
+
+Written 2026-08-28 so the move is one evening when it comes, not a
+rediscovery. Trigger: Vuoro's own `config/schemas/*` get a public static
+host (`schemas.vuoro.cloud`). HostProto joins it in the same change.
+
+**Does not care** (digest-pinned; unaffected by where `$id` points):
+- all five adapters' `hostproto-semantics.lock.json` fetch by git commit
+  from GitHub raw, verify by sha256, and never resolve `$id`;
+- `hostproto.bundle` inlines cross-file `$ref` by `$id` string equality,
+  so any prefix works as long as every schema uses the same one;
+- `vuoro-evidence` matches on `schema_version` constants
+  (`hostproto.receipt/v1` …), never on `$id`.
+
+**Changes, in order** (same shape as the 2026-08-28 housekeeping):
+1. `sed` the `$id` prefix in `schemas/*.json` to
+   `https://schemas.vuoro.cloud/hostproto/v1/`; `emit_bundles`; copy
+   `schemas/*.json` to wherever the static origin is built from
+   (`docs/schemas/v1/` stays as the GitHub Pages mirror or is dropped).
+2. Commit, tag `v0.1.1` (URIs only; no semantics moved).
+3. Re-pin `hostproto-mcp-playwright`, `hostproto-a2a-worker`,
+   `hostproto-dap-core` lock files (commit + digests); re-pin the two DAP
+   bindings to the new `hostproto-dap-core` commit. Run each repo's tests.
+4. Verify `curl https://schemas.vuoro.cloud/hostproto/v1/intent.schema.json`
+   → 200 before pushing the tag.
+
+**Not the place for `$id`:** `vuoro-shared` on appservice. It is a
+`vuoro-service` Deployment on the internal gateway — private hostname,
+image-pinned, appservice-specific. Its legitimate HostProto role is a
+catalog entry: the `CapabilityContract` under which `vuoro-evidence`
+accepts HostProto ingress, naming the bundle digests it accepts.
+
+**Static origin choice** for `schemas.vuoro.cloud`: Cloudflare Pages or an
+R2 bucket with a custom domain, built from a `schemas/` directory in a
+Vuoro-owned repo; not the API worker and not a cluster service.
