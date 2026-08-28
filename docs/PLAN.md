@@ -144,3 +144,15 @@ Stop the generalization if any of these becomes true:
    profiles can only be declared.
 
 Gates 7 and 8 are the earliest signals; watch them during step 3.
+
+## Step 7 — EvidenceSet validation (4–6 weeks) — the binding decision
+
+Scope: `EVIDENCESET_VALIDATION.md`. HostProto is tested as the ingress
+format for host-interaction claims and effect receipts inside a Vuoro
+`EvidenceSet` — not as the EvidenceSet's wire format. One consumer, two
+ingress lanes (existing auditctl command captures; existing browser and
+debugger traffic), no new host adapter. Decision criterion is structural:
+zero profile/adapter/host-class checks in the core reducer and decision
+path, plus one avoided blind rerun, one triggered reacquisition, one
+reconciled uncertain outcome. Promote or freeze; the portfolio write-up
+takes the verdict as its last section either way.

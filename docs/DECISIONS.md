@@ -262,3 +262,40 @@ No schema changed.
 **Guard.** The fake engine is the only place a DAP quirk may be simulated;
 a quirk that cannot be expressed there is a real-engine fact and stays in
 that binding's `docs/DECISIONS.md`.
+
+## ADR-0013: the promotion target is host-interaction evidence, not the EvidenceSet
+
+**Context.** After step 5 the track has proven one envelope across two host
+classes but has no consumer that is not itself. The candidate consumer is
+Vuoro's `EvidenceSet`. A first scope proposed HostProto as that set's
+reference wire format.
+
+**Decision.** Narrowed. HostProto is the reference *ingress* format for
+host-interaction claims and effect-receipt evidence within an EvidenceSet,
+and nothing more. An EvidenceSet also carries Git revisions, tests,
+reports, reviewer evidence, command captures and validity windows; owning
+those would be the schema expansion gate 2 exists to stop. Every HostProto
+element maps to a *claim* (`docs/EVIDENCESET_VALIDATION.md`); `EffectGrant`
+is authority from ActionQ/federation and `Decision` is Vuoro's judgment —
+neither is ever asserted by HostProto.
+
+The validation uses two ingress lanes into one consumer — existing auditctl
+command captures and existing browser/debugger traffic. A command/PTY host
+adapter is explicitly out of scope; building one would test adapter
+authoring, not the consumer.
+
+The promotion criterion is structural, not a branch count: zero checks on
+profile name, adapter kind or host class in the core reducer and decision
+path, with profile decoding confined to registered ingress edges; plus one
+avoided blind rerun, one triggered reacquisition and one reconciled
+uncertain outcome on real traffic.
+
+**Non-goal, recorded.** Target and precondition checks are local
+optimistic-concurrency controls enforced by the adapter or the target. They
+create no cross-host authority or fencing layer. Resource-graph and
+effect-intent projections are advisory evidence.
+
+**Consequence.** Compatibility semantics are not declared at `v0.1.0`; they
+are derived in step 7.4 from what the consumer needed. Valuation is reduced
+to two figures: internal utility (3/10 → up to 8/10) and portfolio evidence
+(8/10 → 9/10 on either branch).
