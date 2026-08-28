@@ -1,0 +1,47 @@
+{
+  "schema_version": "hostproto.observation/v1",
+  "surface": "thread-1",
+  "revision": 4,
+  "cursor": {
+    "since": 15,
+    "next": 15
+  },
+  "projections": [
+    "variables"
+  ],
+  "data": {
+    "variables": [
+      {
+        "schema_version": "hostproto.target-ref/v1",
+        "surface": "thread-1",
+        "target_id": "var-2001",
+        "revision": 4,
+        "role": "variable",
+        "name": "ledger",
+        "actions": [
+          "expand",
+          "set"
+        ]
+      },
+      {
+        "schema_version": "hostproto.target-ref/v1",
+        "surface": "thread-1",
+        "target_id": "var-2002",
+        "revision": 4,
+        "role": "variable",
+        "name": "count = 17",
+        "actions": [
+          "set"
+        ]
+      }
+    ]
+  },
+  "bounded": {
+    "max_bytes": 65536,
+    "lossy": false,
+    "omitted": {},
+    "raw_ref": null
+  },
+  "provider": "engine",
+  "deviations": []
+}

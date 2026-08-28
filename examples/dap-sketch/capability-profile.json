@@ -1,0 +1,111 @@
+{
+  "schema_version": "hostproto.capability-profile/v1",
+  "profile": "dap/v1",
+  "adapter": {
+    "kind": "debugpy",
+    "variant": "python",
+    "identity": {
+      "dap": "1.65",
+      "adapter": "debugpy 1.8"
+    }
+  },
+  "immutable_per_run": true,
+  "capabilities": {
+    "context.launch": {
+      "availability": "supported",
+      "provider": "host",
+      "semantics": "normalized",
+      "verification": "source-audit"
+    },
+    "observe.state": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "source-audit"
+    },
+    "observe.frames": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "source-audit"
+    },
+    "observe.variables": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "source-audit"
+    },
+    "observe.output": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "source-audit"
+    },
+    "act.set_breakpoints": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "source-audit"
+    },
+    "act.step_over": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "source-audit"
+    },
+    "act.continue": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "source-audit"
+    },
+    "act.evaluate": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "source-audit"
+    },
+    "act.step_back": {
+      "availability": "unsupported",
+      "provider": "engine",
+      "semantics": "none",
+      "verification": "source-audit"
+    },
+    "act.restart_frame": {
+      "availability": "partial",
+      "provider": "engine",
+      "semantics": "partial",
+      "verification": "source-audit"
+    },
+    "host_request.run_in_terminal": {
+      "availability": "supported",
+      "provider": "host",
+      "semantics": "normalized",
+      "verification": "source-audit"
+    }
+  },
+  "intent_family": [
+    "set_breakpoints",
+    "step_over",
+    "step_in",
+    "step_out",
+    "continue",
+    "pause",
+    "evaluate",
+    "set_variable",
+    "host_request.resolve"
+  ],
+  "projections": [
+    "state",
+    "frames",
+    "scopes",
+    "variables",
+    "output",
+    "breakpoints"
+  ],
+  "assertable_fields": [
+    "stopped",
+    "thread_id",
+    "revision"
+  ]
+}

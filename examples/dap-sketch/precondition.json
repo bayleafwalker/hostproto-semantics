@@ -1,0 +1,15 @@
+{
+  "schema_version": "hostproto.precondition/v1",
+  "surface": "thread-1",
+  "revision": 4,
+  "assertions": [
+    {
+      "field": "stopped",
+      "equals": true
+    },
+    {
+      "field": "thread_id",
+      "equals": 1
+    }
+  ]
+}

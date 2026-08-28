@@ -68,7 +68,7 @@
   "properties": {
     "bounded": {
       "additionalProperties": false,
-      "description": "Loss is explicit. If lossy, raw_ref names the complete observation.",
+      "description": "Loss is explicit. `omitted` counts, per projection, what was not returned for any reason; if lossy, raw_ref names the complete observation. A non-loss omission (for example a projection the host cannot serve in its current state) keeps lossy=false and must be explained by a deviation.",
       "properties": {
         "lossy": {
           "type": "boolean"

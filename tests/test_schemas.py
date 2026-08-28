@@ -15,6 +15,17 @@ def example(lane: str, name: str) -> dict:
     return json.loads((EXAMPLES / lane / f"{name}.json").read_text(encoding="utf-8"))
 
 
+SCHEMA_NAMES = sorted((p.name.replace(".schema.json", "") for p in SCHEMA_DIR.glob("*.schema.json")), key=len, reverse=True)
+
+
+def schema_for(stem: str) -> Path | None:
+    """`receipt-unknown.json` validates against `receipt`: longest schema-name prefix wins."""
+    for name in SCHEMA_NAMES:
+        if stem == name or stem.startswith(name + "-"):
+            return SCHEMA_DIR / f"{name}.schema.json"
+    return None
+
+
 class SchemaTests(unittest.TestCase):
     def test_every_schema_uses_only_checked_keywords(self) -> None:
         for path in sorted(SCHEMA_DIR.glob("*.schema.json")):
@@ -27,19 +38,37 @@ class SchemaTests(unittest.TestCase):
             for path in sorted((EXAMPLES / lane).glob("*.json")):
                 if path.name == "README.json":
                     continue
-                schema = SCHEMA_DIR / f"{path.stem.split('-unknown')[0]}.schema.json"
+                schema = schema_for(path.stem)
                 with self.subTest(lane=lane, example=path.name):
-                    self.assertTrue(schema.is_file(), f"no schema for {path.name}")
+                    self.assertIsNotNone(schema, f"no schema for {path.name}")
+                    assert schema is not None
                     self.assertEqual(validate(schema, json.loads(path.read_text())), [])
                     count += 1
-        self.assertGreaterEqual(count, 17)
+        self.assertGreaterEqual(count, 30)
 
     def test_the_same_schema_holds_browser_and_dap_instances(self) -> None:
-        """Kill gate 1, at schema level: one envelope, two host classes."""
-        for name in ("handles", "observation", "target-ref", "intent", "receipt", "error"):
+        """Kill gate 1, at schema level: one envelope, two host classes, all eleven schemas."""
+        for name in SCHEMA_NAMES:
             with self.subTest(name=name):
                 for lane in ("browser", "dap-sketch"):
-                    self.assertEqual(validate(SCHEMA_DIR / f"{name}.schema.json", example(lane, name)), [])
+                    instances = [p for p in (EXAMPLES / lane).glob("*.json") if schema_for(p.stem) == SCHEMA_DIR / f"{name}.schema.json"]
+                    if name == "precondition" and lane == "browser":
+                        pass
+                    self.assertTrue(instances, f"{lane} has no {name} example")
+                    for path in instances:
+                        self.assertEqual(validate(SCHEMA_DIR / f"{name}.schema.json", json.loads(path.read_text())), [])
+
+    def test_dap_state_dependent_omission_is_explained_not_lost(self) -> None:
+        observation = example("dap-sketch", "observation-running")
+        self.assertEqual(observation["bounded"]["omitted"], {"frames": 1})
+        self.assertFalse(observation["bounded"]["lossy"])
+        self.assertTrue(any(d["kind"] == "divergence" for d in observation["deviations"]))
+
+    def test_dap_frame_is_rejected_after_resume_without_host_invocation(self) -> None:
+        error = example("dap-sketch", "error")
+        self.assertEqual(error["code"], "target_invalidated")
+        self.assertFalse(error["host_invoked"])
+        self.assertLess(error["data"]["target_revision"], error["data"]["surface_revision"])
 
     def test_stale_target_error_must_not_claim_host_invocation(self) -> None:
         error = example("browser", "error")

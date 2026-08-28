@@ -61,7 +61,7 @@ This inverts the browser-workbench rule that the oracle is never core
 (`DECISIONS.md` ADR-0002): WebKitGTK becomes the challenger that checks
 Playwright, not the reverse.
 
-## Step 3 — DAP schema spike (3 days, before the A2A worker)
+## Step 3 — DAP schema spike (3 days, before the A2A worker) — done 2026-08-28
 
 Express a debug session in these schemas on paper and in `examples/`:
 threads and frames as targets that invalidate on resume; stopped / continued
@@ -69,6 +69,11 @@ as revisions; `stepOver` / `setBreakpoint` as intent; event stream as the
 cursor. No runtime. This runs **before** the A2A worker because the worker is
 projection and cannot fail interestingly, while DAP is where the envelope
 either generalizes or does not (ADR-0003).
+
+Outcome: `docs/DAP_SPIKE.md`. 25 DAP examples validate against the eleven
+unchanged schemas; gates 1, 7 and 8 did not fire (ADR-0008). One general
+rule was stated as a result: the cursor is always host-assigned, a host's
+own ordinals are raw provenance. Step 5 is admissible.
 
 ## Step 4 — A2A host-worker (3 days)
 

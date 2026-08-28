@@ -1,0 +1,12 @@
+{
+  "schema_version": "hostproto.target-ref/v1",
+  "surface": "thread-1",
+  "target_id": "var-2001",
+  "revision": 4,
+  "role": "variable",
+  "name": "ledger",
+  "actions": [
+    "expand",
+    "set"
+  ]
+}

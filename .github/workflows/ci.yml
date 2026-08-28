@@ -22,7 +22,9 @@ jobs:
           for lane in ("browser", "dap-sketch"):
               for p in (root / "examples" / lane).glob("*.json"):
                   if p.name == "README.json": continue
-                  schema = json.loads((root / "schemas" / f"{p.stem.split('-unknown')[0]}.schema.json").read_text())
+                  names = sorted((q.name.replace(".schema.json", "") for q in (root / "schemas").glob("*.schema.json")), key=len, reverse=True)
+                  name = next(n for n in names if p.stem == n or p.stem.startswith(n + "-"))
+                  schema = json.loads((root / "schemas" / f"{name}.schema.json").read_text())
                   Draft202012Validator(schema, registry=registry).validate(json.loads(p.read_text())); n += 1
           print("validated", n, "examples with jsonschema")
           PY

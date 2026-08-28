@@ -3,7 +3,7 @@
   "host": {
     "id": "debugpy-7f3a",
     "kind": "host",
-    "expires": null
+    "expires": "2026-08-28T12:00:00Z"
   },
   "context": {
     "id": "launch-tests-1",
@@ -14,7 +14,7 @@
     "id": "thread-1",
     "kind": "surface",
     "expires": null,
-    "lifecycle": "open"
+    "lifecycle": "terminated"
   },
   "adapter_profile": "dap/v1",
   "writer": {

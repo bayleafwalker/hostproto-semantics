@@ -1,0 +1,9 @@
+{
+  "schema_version": "hostproto.evidence-ref/v1",
+  "ref": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "surface_class": "raw",
+  "media_type": "application/x-ndjson",
+  "size_bytes": 48213,
+  "path": "traces/dap-messages.ndjson",
+  "source_refs": []
+}

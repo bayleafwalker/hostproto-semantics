@@ -1,0 +1,48 @@
+{
+  "schema_version": "hostproto.receipt/v1",
+  "receipt_id": "dbg-rcpt-7",
+  "action_id": "dbg-act-7",
+  "surface": "thread-1",
+  "attempted": true,
+  "accepted": true,
+  "executed": true,
+  "verified": true,
+  "outcome": "completed",
+  "provider": "engine",
+  "caused_events": [
+    "thread-1-evt-000013"
+  ],
+  "effects": [
+    {
+      "kind": "breakpoints",
+      "source": "tests/test_ledger.py",
+      "breakpoints": [
+        {
+          "id": 3,
+          "line": 42,
+          "verified": true
+        },
+        {
+          "id": 4,
+          "line": 58,
+          "verified": false,
+          "message": "line has no code"
+        }
+      ]
+    }
+  ],
+  "revision_before": 4,
+  "revision_after": 4,
+  "state_before": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "state_after": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "evidence": [],
+  "deviations": [
+    {
+      "kind": "divergence",
+      "reason": "one of two requested breakpoints did not bind; the adapter reports verified=false, so this receipt verified only the bound one",
+      "object_ids": [
+        "breakpoint-4"
+      ]
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 {
   "schema_version": "hostproto.error/v1",
   "code": "target_invalidated",
-  "message": "frame f-1001 belongs to revision 4; thread resumed since",
+  "message": "frame frame-1001 belongs to revision 4; thread resumed since",
   "host_invoked": false,
   "data": {
-    "target_id": "f-1001",
+    "target_id": "frame-1001",
     "target_revision": 4,
     "surface_revision": 5
   }

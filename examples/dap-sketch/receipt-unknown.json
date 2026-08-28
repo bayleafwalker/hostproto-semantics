@@ -1,0 +1,25 @@
+{
+  "schema_version": "hostproto.receipt/v1",
+  "receipt_id": "dbg-rcpt-11",
+  "action_id": "dbg-act-11",
+  "surface": "thread-1",
+  "attempted": true,
+  "accepted": true,
+  "executed": false,
+  "verified": false,
+  "outcome": "unknown",
+  "provider": "engine",
+  "caused_events": [],
+  "effects": [],
+  "revision_before": 6,
+  "revision_after": 6,
+  "state_before": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "state_after": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "evidence": [],
+  "deviations": [
+    {
+      "kind": "divergence",
+      "reason": "continue request exceeded its deadline after the adapter accepted it; the program may be running; reconcile from the next observation"
+    }
+  ]
+}

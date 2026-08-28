@@ -116,3 +116,29 @@ profile, and `error.host_invoked` all crossed the wire unchanged. Kill gates
 adapter needed no escape hatch.
 
 **Guard.** Step 3 (DAP spike) is next and is where gate 1 gets tested.
+
+## ADR-0008: the DAP spike did not fire gate 1
+
+**Context.** Step 3 expressed a Debug Adapter Protocol session — threads,
+frames, variables, breakpoints, stepping, `runInTerminal`, exit — in the
+eleven schemas as they stood after step 1 (`docs/DAP_SPIKE.md`).
+
+**Decision.** No envelope change. One clarification to `observation`:
+`bounded.omitted` counts what was not returned for any reason, and a non-loss
+omission (a projection the host cannot serve in its current state, such as
+frames while running) keeps `lossy: false` and must be explained by a
+deviation. One rule generalized from both lanes: **the cursor is
+host-assigned over normalized events; a host's own ordinals (DAP `seq`,
+engine callback ordinals) are raw provenance.** Revision is per surface;
+`allThreadsStopped` stamps each affected surface.
+
+**Consequence.** Kill gates 1, 7 and 8 did not fire; gate 2 did not fire.
+Step 5, a DAP runtime, is admissible, targeting debugpy first. The DAP
+`Breakpoint.verified` flag gives receipts a stronger verification oracle
+than the browser lane has, which is worth noting as evidence *for* the
+receipt design rather than merely compatibility with it.
+
+**Guard.** A spike proves the schemas can describe a debugger. Only the
+runtime proves an adapter can honour them — in particular
+`target_invalidated` before send for a real `variablesReference` after
+`continue`.

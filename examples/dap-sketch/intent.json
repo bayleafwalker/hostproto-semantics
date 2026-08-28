@@ -16,6 +16,7 @@
   },
   "declared_effects": [
     "revision_advance",
-    "frames_invalidated"
+    "frames_invalidated",
+    "stopped:step"
   ]
 }

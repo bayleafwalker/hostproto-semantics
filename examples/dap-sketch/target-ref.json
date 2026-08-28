@@ -1,10 +1,10 @@
 {
   "schema_version": "hostproto.target-ref/v1",
   "surface": "thread-1",
-  "target_id": "f-1001",
+  "target_id": "frame-1001",
   "revision": 4,
   "role": "frame",
-  "name": "main",
+  "name": "main  tests/test_ledger.py:42",
   "actions": [
     "scopes",
     "evaluate",

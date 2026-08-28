@@ -1,0 +1,10 @@
+{
+  "schema_version": "hostproto.error/v1",
+  "code": "handle_expired",
+  "message": "debuggee exited; the host handle is gone",
+  "host_invoked": false,
+  "data": {
+    "host": "debugpy-7f3a",
+    "exit_code": 0
+  }
+}

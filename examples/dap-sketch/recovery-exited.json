@@ -1,0 +1,19 @@
+{
+  "schema_version": "hostproto.recovery/v1",
+  "outcome": "unrecoverable",
+  "cause": "host_terminated",
+  "context": "launch-tests-1",
+  "checkpoint": null,
+  "writer_epoch": 1,
+  "approval": null,
+  "evidence": [
+    {
+      "schema_version": "hostproto.evidence-ref/v1",
+      "ref": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "surface_class": "raw",
+      "media_type": "application/x-ndjson",
+      "size_bytes": 48213,
+      "path": "traces/dap-messages.ndjson"
+    }
+  ]
+}

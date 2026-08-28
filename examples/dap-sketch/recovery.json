@@ -1,0 +1,10 @@
+{
+  "schema_version": "hostproto.recovery/v1",
+  "outcome": "reobserve_required",
+  "cause": "stale_observation",
+  "context": "launch-tests-1",
+  "checkpoint": null,
+  "writer_epoch": 1,
+  "approval": null,
+  "evidence": []
+}

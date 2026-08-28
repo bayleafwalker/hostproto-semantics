@@ -1,0 +1,10 @@
+{
+  "schema_version": "hostproto.intent/v1",
+  "action_id": "dbg-act-3",
+  "surface": "thread-1",
+  "kind": "host_request.resolve",
+  "decision_token": "rit-0001",
+  "params": {
+    "decision": "deny"
+  }
+}

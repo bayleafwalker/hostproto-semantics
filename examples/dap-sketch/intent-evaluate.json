@@ -1,0 +1,35 @@
+{
+  "schema_version": "hostproto.intent/v1",
+  "action_id": "dbg-act-8",
+  "surface": "thread-1",
+  "kind": "evaluate",
+  "target": {
+    "schema_version": "hostproto.target-ref/v1",
+    "surface": "thread-1",
+    "target_id": "frame-1001",
+    "revision": 4,
+    "role": "frame",
+    "name": "main  tests/test_ledger.py:42",
+    "actions": [
+      "scopes",
+      "evaluate",
+      "restart"
+    ]
+  },
+  "params": {
+    "expression": "len(ledger)",
+    "context": "watch"
+  },
+  "preconditions": {
+    "schema_version": "hostproto.precondition/v1",
+    "surface": "thread-1",
+    "revision": 4,
+    "assertions": [
+      {
+        "field": "stopped",
+        "equals": true
+      }
+    ]
+  },
+  "declared_effects": []
+}

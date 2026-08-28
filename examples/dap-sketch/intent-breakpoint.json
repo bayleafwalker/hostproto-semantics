@@ -1,0 +1,16 @@
+{
+  "schema_version": "hostproto.intent/v1",
+  "action_id": "dbg-act-7",
+  "surface": "thread-1",
+  "kind": "set_breakpoints",
+  "params": {
+    "source": "tests/test_ledger.py",
+    "lines": [
+      42,
+      58
+    ]
+  },
+  "declared_effects": [
+    "breakpoints_replaced_for_source"
+  ]
+}

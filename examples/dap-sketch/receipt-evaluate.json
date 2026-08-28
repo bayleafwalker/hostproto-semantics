@@ -1,7 +1,7 @@
 {
   "schema_version": "hostproto.receipt/v1",
-  "receipt_id": "dbg-rcpt-9",
-  "action_id": "dbg-act-9",
+  "receipt_id": "dbg-rcpt-8",
+  "action_id": "dbg-act-8",
   "surface": "thread-1",
   "attempted": true,
   "accepted": true,
@@ -9,25 +9,18 @@
   "verified": true,
   "outcome": "completed",
   "provider": "engine",
-  "caused_events": [
-    "thread-1-evt-000016",
-    "thread-1-evt-000017"
-  ],
+  "caused_events": [],
   "effects": [
     {
-      "kind": "continued",
-      "thread_id": 1
-    },
-    {
-      "kind": "stopped",
-      "reason": "step",
-      "line": 43
+      "kind": "evaluate",
+      "result": "17",
+      "type": "int"
     }
   ],
   "revision_before": 4,
-  "revision_after": 5,
+  "revision_after": 4,
   "state_before": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  "state_after": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "state_after": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "evidence": [],
   "deviations": []
 }

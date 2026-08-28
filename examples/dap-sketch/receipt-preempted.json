@@ -1,7 +1,7 @@
 {
   "schema_version": "hostproto.receipt/v1",
-  "receipt_id": "dbg-rcpt-9",
-  "action_id": "dbg-act-9",
+  "receipt_id": "dbg-rcpt-10",
+  "action_id": "dbg-act-10",
   "surface": "thread-1",
   "attempted": true,
   "accepted": true,
@@ -10,8 +10,8 @@
   "outcome": "completed",
   "provider": "engine",
   "caused_events": [
-    "thread-1-evt-000016",
-    "thread-1-evt-000017"
+    "thread-1-evt-000018",
+    "thread-1-evt-000019"
   ],
   "effects": [
     {
@@ -20,14 +20,25 @@
     },
     {
       "kind": "stopped",
-      "reason": "step",
-      "line": 43
+      "reason": "breakpoint",
+      "line": 58,
+      "hit_breakpoint_ids": [
+        4
+      ]
     }
   ],
-  "revision_before": 4,
-  "revision_after": 5,
+  "revision_before": 5,
+  "revision_after": 6,
   "state_before": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "state_after": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
   "evidence": [],
-  "deviations": []
+  "deviations": [
+    {
+      "kind": "divergence",
+      "reason": "declared effect stopped:step, observed stopped:breakpoint; a breakpoint pre-empted the step and the receipt says so",
+      "object_ids": [
+        "thread-1"
+      ]
+    }
+  ]
 }

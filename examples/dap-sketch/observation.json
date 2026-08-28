@@ -8,19 +8,56 @@
   },
   "projections": [
     "state",
-    "frames"
+    "frames",
+    "output"
   ],
   "data": {
     "state": {
       "stopped": true,
       "reason": "breakpoint",
-      "thread_id": 1
+      "thread_id": 1,
+      "hit_breakpoint_ids": [
+        3
+      ],
+      "all_threads_stopped": true
     },
     "frames": [
       {
-        "frame_id": "f-1001",
-        "name": "main",
-        "line": 42
+        "schema_version": "hostproto.target-ref/v1",
+        "surface": "thread-1",
+        "target_id": "frame-1001",
+        "revision": 4,
+        "role": "frame",
+        "name": "main  tests/test_ledger.py:42",
+        "actions": [
+          "scopes",
+          "evaluate",
+          "restart"
+        ]
+      },
+      {
+        "schema_version": "hostproto.target-ref/v1",
+        "surface": "thread-1",
+        "target_id": "frame-1002",
+        "revision": 4,
+        "role": "frame",
+        "name": "run  tests/runner.py:17",
+        "actions": [
+          "scopes",
+          "evaluate"
+        ]
+      }
+    ],
+    "output": [
+      {
+        "event_id": "thread-1-evt-000014",
+        "seq": 14,
+        "kind": "output",
+        "revision": 4,
+        "payload": {
+          "category": "stdout",
+          "output": "ledger: 17 capabilities\n"
+        }
       }
     ]
   },

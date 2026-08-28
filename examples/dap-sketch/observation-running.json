@@ -1,0 +1,37 @@
+{
+  "schema_version": "hostproto.observation/v1",
+  "surface": "thread-1",
+  "revision": 5,
+  "cursor": {
+    "since": 15,
+    "next": 16
+  },
+  "projections": [
+    "state",
+    "frames"
+  ],
+  "data": {
+    "state": {
+      "stopped": false,
+      "thread_id": 1
+    }
+  },
+  "bounded": {
+    "max_bytes": 65536,
+    "lossy": false,
+    "omitted": {
+      "frames": 1
+    },
+    "raw_ref": null
+  },
+  "provider": "engine",
+  "deviations": [
+    {
+      "kind": "divergence",
+      "reason": "frames projection requires a stopped thread; omitted, not lost",
+      "object_ids": [
+        "thread-1"
+      ]
+    }
+  ]
+}
