@@ -94,9 +94,23 @@ fire (ADR-0009). The worker found and fixed an adapter defect (an explicit
 dialog `accept` was dismissed) — visible on the wire because the receipt
 carries the decision.
 
-## Step 5 — DAP adapter (full)
+## Step 5 — DAP adapter (full) — done 2026-08-28
 
 Only if step 3 needed no envelope change.
+
+Outcome: [hostproto-dap-debugpy](https://github.com/bayleafwalker/hostproto-dap-debugpy),
+debugpy 1.8.21 over MCP 2026-07-28, pinning the same eleven bundles as the
+browser adapter, unchanged. The spike's rule was proven live: a
+`variablesReference` observed before a resume is refused as
+`target_invalidated` with `host_invoked: false` before anything is sent.
+Revision moves per thread on every stopped↔running transition; a resume that
+never stops is `outcome: unknown`; frames while running are omitted, not
+lost; `runInTerminal` is a decision token behind a `creating` surface;
+recovery carries the raw DAP message log as content-addressed evidence.
+Fourteen wire tests on real debugpy and Python. Kill gates 1, 6 and 8 did
+not fire at runtime (ADR-0010). Six debugpy wire facts are recorded in the
+adapter's `docs/DECISIONS.md`; one spike case (`verified: false` at set
+time) is not reachable on debugpy, which binds eagerly and relocates.
 
 ## Step 6 — native WebKitGTK conformance
 

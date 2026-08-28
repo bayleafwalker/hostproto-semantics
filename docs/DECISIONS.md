@@ -170,3 +170,30 @@ One adapter gap noted, not a semantic: the host-side `await` is all-of, and
 **Guard.** The domain runtime is in-memory and single-process. Replacing it
 with ActionQ must not change a single line of `executor.ts`'s projection;
 if it does, the split was wrong.
+
+## ADR-0010: step 5 — the second host class runs on the same envelope
+
+**Context.** The DAP runtime (hostproto-dap-debugpy) put a real debugger
+behind the eleven bundles, with the browser adapter's structure kept
+file-for-file: a client that only frames messages, a host that owns the
+semantics, a server that only projects.
+
+**Decision.** No schema change. Gate 1 is now tested at runtime, not on
+paper: handles, revisioned observation with a host-assigned cursor,
+revision-scoped targets refused before send, preconditions, receipts with
+`unknown`, evidence refs, recovery, and an earned capability profile all
+crossed the wire for a debugger exactly as for a browser. Gate 8 held: the
+`dap/v1` profile earns `runtime` per capability by execution, and
+availability comes from the adapter's own `initialize` answer.
+
+**Consequence.** Two host classes, one envelope, one worker profile. The
+`creating` surface lifecycle — needed because debugpy asks the client to run
+the debuggee before it reports initialized — is a state the schema already
+had; no escape hatch (gate 6). One spike case is unreachable on debugpy
+(`Breakpoint.verified: false` at set time); the receipt instead records the
+adapter's relocation as a deviation, which is a stronger record than the
+spike expected.
+
+**Guard.** Step 6 (native WebKitGTK) stays optional. The next question is
+not a third host class but a second debugger: if a non-debugpy adapter needs
+a different envelope, gate 1 fires late.
