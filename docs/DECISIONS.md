@@ -357,8 +357,11 @@ derived from what the consumer needed, and only that:
    did. No HostProto object may carry a `Decision`.
 
 **Consequence.** `hostproto-semantics` is canonical at `v0.1.0`; the `$id`
-move to `schemas.vuoro.cloud/hostproto/v1/` is now authorised (the promote
-branch of step 7.1). Rule 4 is a debt: the capability profile should name
+stays on GitHub Pages: the freeze-branch objection to a Vuoro-owned URI is
+gone, but nothing depends on `$id` resolving (adapters pin by digest) and
+no consumer outside these repos needs the Vuoro identity yet. Move to
+`schemas.vuoro.cloud/hostproto/v1/` only when one does, or when Vuoro's own
+schemas move to a `schemas.` host. Rule 4 is a debt: the capability profile should name
 the state-digest algorithm in the next minor. `vuoro-evidence` is the first
 consumer and its boundary test is the standing enforcement of gate 2 from
 the consumer's side.

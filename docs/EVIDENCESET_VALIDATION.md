@@ -192,5 +192,6 @@ thirteen observations and three evidence refs in artifacts — through the
 unchanged session loader. vuoro `a3aadb8`, 24 tests.
 
 **Verdict: promote.** ADR-0014 records the evidence and the six
-compatibility rules derived from consumer need. Housekeeping's deferred
-item — `$id` under `schemas.vuoro.cloud/hostproto/v1/` — is now authorised.
+compatibility rules derived from consumer need. The `$id` move to
+`schemas.vuoro.cloud/hostproto/v1/` is no longer blocked but is deferred
+until a consumer outside these repos needs the Vuoro identity (ADR-0014).
