@@ -92,7 +92,7 @@ sources feed the same EvidenceSet implementation:
 
 | Lane | Source | What it exercises |
 | --- | --- | --- |
-| Command captures | existing auditctl captures | cost-blind rerun and validity-window problem |
+| Command captures | existing outctl capture manifests (`_artifacts/outctl-*/captures/*/manifest.json`) under auditctl's `harness.baseline` validity-window rule | blind rerun and validity-window problem |
 | Host-interaction receipts | existing HostProto browser and debugger traffic | generic receipt ingestion |
 
 Through the auditctl lane, show that:
@@ -140,5 +140,18 @@ unusually credible negative result. Neither branch wastes the work.
   therefore also fixes their first implementation; keep the reducer and
   the ingress edges in separate modules from day one so the step 4
   criterion can be checked mechanically (grep, or an import-boundary test).
-- auditctl captures: `auditctl/docs/contracts/publisher-subprocess.md`
-  (collector captures the observable half, canonically hashed).
+- **Premise corrected 2026-08-28:** auditctl has no command-capture event
+  type and no capture ref prefix; bulk payloads are `immutableRef
+  kind=artifact` material by rule (`auditctl/ndjson.py`). The only real
+  command captures are outctl manifests (retired binding, artifacts
+  intact, schema-drifted: no argv recorded). The validity-window semantics
+  are auditctl's, from the `harness.baseline` contract
+  (`publisher-subprocess.md` §"silence is the in-window state"). The lane
+  therefore ingests outctl manifests with a collector-declared window; the
+  collector, not the capture, owns the window. Still no new host.
+- "cost-blind rerun" is a coinage of this phase, not a term in the Vuoro
+  corpus; the nearest normative wording is "emit `EvidenceExpired` rather
+  than silently rerunning" (long-term-direction §5.1).
+- Step 7.2 done 2026-08-28: `vuoro/packages/vuoro-evidence` — core
+  (`model`, `reducer`, `decision`), ingress (`hostproto`, `command-capture`),
+  17 tests including the mechanical boundary check.
