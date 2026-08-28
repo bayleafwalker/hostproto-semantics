@@ -1,0 +1,11 @@
+{
+  "schema_version": "hostproto.precondition/v1",
+  "surface": "page-1",
+  "revision": 2,
+  "assertions": [
+    {
+      "field": "title",
+      "equals": "Workbench Fixture Index"
+    }
+  ]
+}

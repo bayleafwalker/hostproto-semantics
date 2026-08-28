@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostproto.invalid/schemas/recovery.schema.json",
+  "title": "HostProto recovery v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "outcome",
+    "cause",
+    "context",
+    "approval"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hostproto.recovery/v1"
+    },
+    "outcome": {
+      "enum": [
+        "resumed",
+        "reobserve_required",
+        "handover_required",
+        "human_required",
+        "unrecoverable"
+      ]
+    },
+    "cause": {
+      "enum": [
+        "handle_expired",
+        "stale_observation",
+        "client_interrupted",
+        "writer_fenced",
+        "host_terminated"
+      ]
+    },
+    "context": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque, server-minted. Never parsed by clients."
+    },
+    "checkpoint": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "State reference used for resume. A checkpoint records state; it is never an approval."
+    },
+    "writer_epoch": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Epoch after recovery. Increments on handover."
+    },
+    "approval": {
+      "const": null,
+      "description": "Always null: recovery cannot mint approval. Approval flows through MCP elicitation or A2A INPUT_REQUIRED."
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "https://hostproto.invalid/schemas/evidence-ref.schema.json"
+      }
+    }
+  }
+}

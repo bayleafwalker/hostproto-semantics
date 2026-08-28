@@ -1,0 +1,35 @@
+{
+  "schema_version": "hostproto.observation/v1",
+  "surface": "thread-1",
+  "revision": 4,
+  "cursor": {
+    "since": 12,
+    "next": 15
+  },
+  "projections": [
+    "state",
+    "frames"
+  ],
+  "data": {
+    "state": {
+      "stopped": true,
+      "reason": "breakpoint",
+      "thread_id": 1
+    },
+    "frames": [
+      {
+        "frame_id": "f-1001",
+        "name": "main",
+        "line": 42
+      }
+    ]
+  },
+  "bounded": {
+    "max_bytes": 65536,
+    "lossy": false,
+    "omitted": {},
+    "raw_ref": null
+  },
+  "provider": "engine",
+  "deviations": []
+}

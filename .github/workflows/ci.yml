@@ -1,0 +1,28 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  schemas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: PYTHONPATH=src python -m unittest discover -s tests -v
+      # Full-spec validation, in case the subset validator and a schema disagree.
+      - run: pip install jsonschema
+      - run: |
+          python - <<'PY'
+          import json, pathlib, jsonschema
+          from jsonschema import Draft202012Validator
+          from referencing import Registry, Resource
+          root = pathlib.Path("."); registry = Registry()
+          for p in root.glob("schemas/*.json"):
+              s = json.loads(p.read_text()); registry = registry.with_resource(s["$id"], Resource.from_contents(s))
+          n = 0
+          for lane in ("browser", "dap-sketch"):
+              for p in (root / "examples" / lane).glob("*.json"):
+                  if p.name == "README.json": continue
+                  schema = json.loads((root / "schemas" / f"{p.stem}.schema.json").read_text())
+                  Draft202012Validator(schema, registry=registry).validate(json.loads(p.read_text())); n += 1
+          print("validated", n, "examples with jsonschema")
+          PY

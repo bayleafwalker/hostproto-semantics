@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostproto.invalid/schemas/error.schema.json",
+  "title": "HostProto error v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "message",
+    "host_invoked"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hostproto.error/v1"
+    },
+    "code": {
+      "enum": [
+        "target_invalidated",
+        "precondition_failed",
+        "handle_expired",
+        "writer_fenced",
+        "writer_conflict",
+        "capability_unsupported",
+        "capability_blocked",
+        "deadline_exceeded",
+        "host_rejected",
+        "host_failed",
+        "integrity_mismatch",
+        "invalid_request"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "host_invoked": {
+      "type": "boolean",
+      "description": "Whether the host was touched before this error. target_invalidated, precondition_failed, writer_fenced and capability_* MUST be false."
+    },
+    "data": {
+      "type": "object"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "https://hostproto.invalid/schemas/evidence-ref.schema.json"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "enum": [
+              "target_invalidated",
+              "precondition_failed",
+              "writer_fenced",
+              "writer_conflict",
+              "capability_unsupported",
+              "capability_blocked",
+              "invalid_request"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "host_invoked": {
+            "const": false
+          }
+        }
+      }
+    }
+  ]
+}

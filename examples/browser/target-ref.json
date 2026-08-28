@@ -1,0 +1,11 @@
+{
+  "schema_version": "hostproto.target-ref/v1",
+  "surface": "page-1",
+  "target_id": "target-1",
+  "revision": 2,
+  "role": "link",
+  "name": "Next",
+  "actions": [
+    "click"
+  ]
+}

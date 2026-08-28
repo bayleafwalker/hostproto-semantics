@@ -1,0 +1,48 @@
+# HostProto
+
+Typed, evidence-bearing interaction with stateful hosts.
+
+> HostProto defines how an agent observes and acts on a stateful host — a
+> browser context, a debug session, later others — with stable handles,
+> revisioned observations, explicitly invalidated target references,
+> declared intent, receipts, and content-addressed evidence.
+> MCP exposes host primitives. A2A exposes agents that perform delegated host
+> work. HostProto is the semantics both carry; it is **not a third wire
+> protocol.**
+
+This repository holds the canonical semantic schemas, the alignment of those
+semantics onto MCP and A2A, the plan, and the kill gates. Adapters and
+conformance backends live elsewhere and are referenced, not vendored:
+
+- [browser-workbench](https://github.com/bayleafwalker/browser-workbench) —
+  the frozen WebKitGTK conformance milestone (native slices 1–6) whose
+  protocol these schemas generalize. See `docs/ALIGNMENT_MAP.md`.
+- [hostproto](https://github.com/bayleafwalker/hostproto) — the earlier
+  HostProto 0.1.0 spec package and Rust workspace (`HOST_PROTOCOL_V0`,
+  `CAPABILITY_MODEL`, `TEMPORAL_AND_STATE_SEMANTICS`). Its types are the
+  second alignment source; mapping them is part of `docs/PLAN.md` step 1.
+
+## Layout
+
+| Path | What |
+| --- | --- |
+| `docs/THESIS.md` | the claim, and what would falsify it |
+| `docs/RESPONSIBILITY_SPLIT.md` | what MCP, A2A, HostProto, the domain runtime, and adapters each own |
+| `docs/PLAN.md` | the execution track, time boxes, and kill gates |
+| `docs/ALIGNMENT_MAP.md` | every browser-workbench type mapped to its HostProto schema |
+| `docs/DECISIONS.md` | decision records |
+| `schemas/` | canonical JSON Schemas (draft 2020-12) for the semantic types |
+| `examples/browser/` | instances derived from real browser-workbench evidence |
+| `examples/dap-sketch/` | what the same types look like for a debug session — the first challenger |
+| `src/hostproto/` | a dependency-free validator for the schema subset used here |
+| `tests/` | every example validates; every documented invalidation is rejected |
+
+## Status
+
+Pre-alignment. Nothing here is verified against MCP 2026-07-28 or A2A v1.0
+yet; `docs/PLAN.md` step 0 is that verification, and it gates step 1.
+
+```sh
+PYTHONPATH=src python3 -m unittest discover -s tests
+python3 -m hostproto.validate schemas/receipt.schema.json examples/browser/receipt.json
+```

@@ -1,0 +1,10 @@
+{
+  "schema_version": "hostproto.recovery/v1",
+  "outcome": "resumed",
+  "cause": "client_interrupted",
+  "context": "corpus-ephemeral",
+  "checkpoint": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "writer_epoch": 2,
+  "approval": null,
+  "evidence": []
+}

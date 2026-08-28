@@ -1,0 +1,6 @@
+[project]
+name = "hostproto"
+version = "0.0.1"
+description = "Canonical semantics for typed, evidence-bearing interaction with stateful hosts"
+requires-python = ">=3.11"
+license = {text = "MIT"}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "hostproto.handles/v1",
+  "host": {
+    "id": "session-0001",
+    "kind": "host",
+    "expires": null
+  },
+  "context": {
+    "id": "corpus-ephemeral",
+    "kind": "context",
+    "expires": null
+  },
+  "surface": {
+    "id": "page-1",
+    "kind": "surface",
+    "expires": null
+  },
+  "adapter_profile": "browser/v1",
+  "writer": {
+    "fence_id": "lease-0001",
+    "epoch": 1,
+    "holder": "writer-a"
+  }
+}

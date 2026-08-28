@@ -1,0 +1,21 @@
+{
+  "schema_version": "hostproto.intent/v1",
+  "action_id": "dbg-act-9",
+  "surface": "thread-1",
+  "kind": "step_over",
+  "preconditions": {
+    "schema_version": "hostproto.precondition/v1",
+    "surface": "thread-1",
+    "revision": 4,
+    "assertions": [
+      {
+        "field": "stopped",
+        "equals": true
+      }
+    ]
+  },
+  "declared_effects": [
+    "revision_advance",
+    "frames_invalidated"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": "hostproto.receipt/v1",
+  "receipt_id": "dbg-rcpt-9",
+  "action_id": "dbg-act-9",
+  "surface": "thread-1",
+  "attempted": true,
+  "accepted": true,
+  "executed": true,
+  "verified": true,
+  "provider": "engine",
+  "caused_events": [
+    "dap-evt-16",
+    "dap-evt-17"
+  ],
+  "effects": [
+    {
+      "kind": "stopped",
+      "reason": "step",
+      "line": 43
+    }
+  ],
+  "revision_before": 4,
+  "revision_after": 5,
+  "deviations": []
+}

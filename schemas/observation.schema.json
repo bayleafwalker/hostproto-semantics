@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostproto.invalid/schemas/observation.schema.json",
+  "title": "HostProto observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "surface",
+    "revision",
+    "cursor",
+    "projections",
+    "data",
+    "bounded",
+    "provider"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hostproto.observation/v1"
+    },
+    "surface": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque, server-minted. Never parsed by clients."
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Surface revision the observation was taken at. Increments when the surface's document/state is replaced (document commit, checkpoint restore, debug stop/continue)."
+    },
+    "cursor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "since",
+        "next"
+      ],
+      "properties": {
+        "since": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "next": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "description": "Position in the ordered event stream. `next` is the only ordered identifier in HostProto."
+    },
+    "projections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "data": {
+      "type": "object",
+      "description": "Per-projection payloads, each shaped by the adapter profile's projection schema."
+    },
+    "bounded": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_bytes",
+        "lossy",
+        "omitted"
+      ],
+      "properties": {
+        "max_bytes": {
+          "type": "integer",
+          "minimum": 512
+        },
+        "lossy": {
+          "type": "boolean"
+        },
+        "omitted": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "raw_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "description": "Loss is explicit. If lossy, raw_ref names the complete observation."
+    },
+    "provider": {
+      "enum": [
+        "engine",
+        "injected",
+        "host",
+        "oracle"
+      ]
+    },
+    "deviations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind"
+        ]
+      }
+    }
+  }
+}

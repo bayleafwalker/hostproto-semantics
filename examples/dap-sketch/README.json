@@ -1,0 +1,3 @@
+{
+  "note": "Sketch only (PLAN.md step 3). Shows that a frame is a revision-scoped target, step_over is an intent with a stopped precondition, and resume invalidates frames exactly as a document commit invalidates DOM targets. No DAP runtime exists yet."
+}

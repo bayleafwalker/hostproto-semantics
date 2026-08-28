@@ -1,0 +1,31 @@
+{
+  "schema_version": "hostproto.observation/v1",
+  "surface": "page-1",
+  "revision": 2,
+  "cursor": {
+    "since": 0,
+    "next": 9
+  },
+  "projections": [
+    "state",
+    "dom"
+  ],
+  "data": {
+    "state": {
+      "url": "http://127.0.0.1:41000/next.html",
+      "title": "Workbench Fixture Next",
+      "load_state": "idle"
+    },
+    "dom": {
+      "sha256": "9942f784a4570720000000000000000000000000000000000000000000000000"
+    }
+  },
+  "bounded": {
+    "max_bytes": 262144,
+    "lossy": false,
+    "omitted": {},
+    "raw_ref": null
+  },
+  "provider": "engine",
+  "deviations": []
+}

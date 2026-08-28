@@ -1,0 +1,27 @@
+{
+  "schema_version": "hostproto.receipt/v1",
+  "receipt_id": "receipt-0001",
+  "action_id": "action-0001",
+  "surface": "page-1",
+  "attempted": true,
+  "accepted": true,
+  "executed": true,
+  "verified": true,
+  "provider": "injected",
+  "caused_events": [
+    "evt-000010",
+    "evt-000011"
+  ],
+  "effects": [
+    {
+      "kind": "click",
+      "target_id": "target-1"
+    }
+  ],
+  "revision_before": 2,
+  "revision_after": 3,
+  "state_before": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "state_after": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "evidence": [],
+  "deviations": []
+}

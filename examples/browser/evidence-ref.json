@@ -1,0 +1,9 @@
+{
+  "schema_version": "hostproto.evidence-ref/v1",
+  "ref": "sha256:834129448807cc51edcd39a868c268510e968995a073d673fcb4ded2512e34e9",
+  "surface_class": "raw",
+  "media_type": "application/octet-stream",
+  "size_bytes": 31,
+  "path": "downloads/download.bin",
+  "source_refs": []
+}

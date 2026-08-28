@@ -1,0 +1,62 @@
+{
+  "schema_version": "hostproto.capability-profile/v1",
+  "profile": "browser/v1",
+  "adapter": {
+    "kind": "webkitgtk",
+    "variant": "stable-ephemeral",
+    "identity": {
+      "engine": "2.52.6"
+    }
+  },
+  "capabilities": {
+    "surface.navigate": {
+      "availability": "supported",
+      "provider": "engine",
+      "semantics": "exact",
+      "verification": "runtime",
+      "runtime_executions": 27
+    },
+    "surface.observe.network": {
+      "availability": "partial",
+      "provider": "engine",
+      "semantics": "partial",
+      "verification": "runtime",
+      "runtime_executions": 3,
+      "notes": [
+        "partial semantics must not satisfy an exact requirement"
+      ]
+    },
+    "surface.act.keyboard": {
+      "availability": "supported",
+      "provider": "injected",
+      "semantics": "normalized",
+      "verification": "source-audit"
+    }
+  },
+  "intent_family": [
+    "javascript",
+    "click",
+    "type",
+    "dialog.resolve",
+    "permission.resolve",
+    "upload",
+    "download.accept",
+    "test.crash"
+  ],
+  "projections": [
+    "state",
+    "dom",
+    "console",
+    "network",
+    "screenshot",
+    "targets",
+    "dialogs",
+    "permissions",
+    "downloads"
+  ],
+  "assertable_fields": [
+    "url",
+    "title",
+    "revision"
+  ]
+}

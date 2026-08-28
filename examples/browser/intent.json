@@ -1,0 +1,20 @@
+{
+  "schema_version": "hostproto.intent/v1",
+  "action_id": "action-0001",
+  "surface": "page-1",
+  "kind": "click",
+  "target": {
+    "schema_version": "hostproto.target-ref/v1",
+    "surface": "page-1",
+    "target_id": "target-1",
+    "revision": 2,
+    "role": "link",
+    "name": "Next",
+    "actions": [
+      "click"
+    ]
+  },
+  "declared_effects": [
+    "navigation"
+  ]
+}

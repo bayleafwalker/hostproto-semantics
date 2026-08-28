@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostproto.invalid/schemas/handles.schema.json",
+  "title": "HostProto handles v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "host",
+    "context",
+    "surface",
+    "adapter_profile"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hostproto.handles/v1"
+    },
+    "host": {
+      "$ref": "#/$defs/handle"
+    },
+    "context": {
+      "$ref": "#/$defs/handle"
+    },
+    "surface": {
+      "$ref": "#/$defs/handle"
+    },
+    "adapter_profile": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Which capability profile minted these, e.g. browser/v1, dap/v1."
+    },
+    "writer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fence_id",
+        "epoch"
+      ],
+      "properties": {
+        "fence_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Opaque, server-minted. Never parsed by clients."
+        },
+        "epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "holder": {
+          "type": "string"
+        }
+      },
+      "description": "Context-level single-writer fencing. Epoch increments on every handover."
+    }
+  },
+  "$defs": {
+    "handle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Opaque, server-minted. Never parsed by clients."
+        },
+        "kind": {
+          "enum": [
+            "host",
+            "context",
+            "surface"
+          ]
+        },
+        "expires": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO-8601 or null for adapter-managed lifetime."
+        }
+      }
+    }
+  }
+}

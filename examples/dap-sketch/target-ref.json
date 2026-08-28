@@ -1,0 +1,13 @@
+{
+  "schema_version": "hostproto.target-ref/v1",
+  "surface": "thread-1",
+  "target_id": "f-1001",
+  "revision": 4,
+  "role": "frame",
+  "name": "main",
+  "actions": [
+    "scopes",
+    "evaluate",
+    "restart"
+  ]
+}

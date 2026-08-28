@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostproto.invalid/schemas/intent.schema.json",
+  "title": "HostProto intent v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "action_id",
+    "surface",
+    "kind"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hostproto.intent/v1"
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque, server-minted. Never parsed by clients."
+    },
+    "surface": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque, server-minted. Never parsed by clients."
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Member of the adapter profile's closed intent family."
+    },
+    "target": {
+      "$ref": "https://hostproto.invalid/schemas/target-ref.schema.json"
+    },
+    "params": {
+      "type": "object"
+    },
+    "preconditions": {
+      "$ref": "https://hostproto.invalid/schemas/precondition.schema.json"
+    },
+    "decision_token": {
+      "type": "string",
+      "description": "For intents that resolve a host-owned request (dialog, permission, file chooser). Consumed exactly once."
+    },
+    "declared_effects": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "What the caller expects to change. Compared against Receipt.effects by conformance tooling, never enforced by the adapter."
+    }
+  }
+}

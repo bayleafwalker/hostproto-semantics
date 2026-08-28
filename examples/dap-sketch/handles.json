@@ -1,0 +1,24 @@
+{
+  "schema_version": "hostproto.handles/v1",
+  "host": {
+    "id": "debugpy-7f3a",
+    "kind": "host",
+    "expires": null
+  },
+  "context": {
+    "id": "launch-config-tests",
+    "kind": "context",
+    "expires": null
+  },
+  "surface": {
+    "id": "thread-1",
+    "kind": "surface",
+    "expires": null
+  },
+  "adapter_profile": "dap/v1",
+  "writer": {
+    "fence_id": "dbg-fence-1",
+    "epoch": 1,
+    "holder": "agent-x"
+  }
+}

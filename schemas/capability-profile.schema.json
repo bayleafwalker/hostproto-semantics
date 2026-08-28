@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostproto.invalid/schemas/capability-profile.schema.json",
+  "title": "HostProto capability profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "adapter",
+    "capabilities",
+    "intent_family",
+    "projections"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hostproto.capability-profile/v1"
+    },
+    "profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adapter": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "variant": {
+          "type": "string"
+        },
+        "identity": {
+          "type": "object"
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "availability",
+          "provider",
+          "semantics",
+          "verification"
+        ],
+        "properties": {
+          "availability": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "blocked"
+            ]
+          },
+          "provider": {
+            "enum": [
+              "engine",
+              "injected",
+              "host",
+              "oracle"
+            ]
+          },
+          "semantics": {
+            "enum": [
+              "exact",
+              "normalized",
+              "partial",
+              "none"
+            ]
+          },
+          "verification": {
+            "enum": [
+              "runtime",
+              "source-audit",
+              "declared",
+              "none"
+            ]
+          },
+          "runtime_executions": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required when verification is runtime."
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "if": {
+          "properties": {
+            "verification": {
+              "const": "runtime"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "runtime_executions"
+          ]
+        }
+      }
+    },
+    "intent_family": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "projections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "assertable_fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "description": "runtime verification is earned only by an operation that completed in a passed run. Declaration never upgrades it. partial never satisfies an exact requirement."
+}

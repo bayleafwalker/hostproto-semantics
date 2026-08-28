@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostproto.invalid/schemas/receipt.schema.json",
+  "title": "HostProto receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "action_id",
+    "surface",
+    "attempted",
+    "accepted",
+    "executed",
+    "verified",
+    "provider",
+    "caused_events",
+    "effects",
+    "revision_before",
+    "revision_after"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hostproto.receipt/v1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque, server-minted. Never parsed by clients."
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque, server-minted. Never parsed by clients."
+    },
+    "surface": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque, server-minted. Never parsed by clients."
+    },
+    "attempted": {
+      "type": "boolean"
+    },
+    "accepted": {
+      "type": "boolean",
+      "description": "Passed preconditions and target check; host was invoked."
+    },
+    "executed": {
+      "type": "boolean",
+      "description": "Host reported completion."
+    },
+    "verified": {
+      "type": "boolean",
+      "description": "An effect or caused event was actually observed. Not merely that the call returned."
+    },
+    "provider": {
+      "enum": [
+        "engine",
+        "injected",
+        "host",
+        "oracle"
+      ]
+    },
+    "caused_events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Opaque, server-minted. Never parsed by clients."
+      },
+      "description": "Event ids the action caused, from the ordered stream."
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "revision_before": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "revision_after": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "state_before": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "state_after": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "https://hostproto.invalid/schemas/evidence-ref.schema.json"
+      }
+    },
+    "deviations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind"
+        ]
+      }
+    }
+  },
+  "description": "attempted/accepted/executed/verified are independent. A receipt with executed=true and verified=false is legitimate and must be reported as such."
+}
