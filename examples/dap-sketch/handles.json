@@ -13,7 +13,8 @@
   "surface": {
     "id": "thread-1",
     "kind": "surface",
-    "expires": null
+    "expires": null,
+    "lifecycle": "open"
   },
   "adapter_profile": "dap/v1",
   "writer": {

@@ -30,7 +30,7 @@ Additional findings from the same pass:
 
 If a feature is thinner than assumed, HostProto keeps that piece and says so.
 
-## Step 1 — protocol-alignment pass (3–4 days)
+## Step 1 — protocol-alignment pass (3–4 days) — done 2026-08-28
 
 Map every browser-workbench type onto its HostProto schema
 (`ALIGNMENT_MAP.md`), and every HostProto 0.1.0 type from the `hostproto`
@@ -39,6 +39,10 @@ repository's spec package (`HOST_PROTOCOL_V0`, `CAPABILITY_MODEL`,
 task, transport, and content abstractions. Deliverable: `schemas/` complete
 with examples and negative tests; the map has no row marked *unmapped*; a
 bundler that inlines cross-file `$ref` for MCP tool definitions.
+
+Outcome: both alignment maps complete with no *unmapped* row; `hostproto.bundle`
+produces self-contained schemas; four semantics recovered from 0.1.0
+(ADR-0006). Nothing deleted (ADR-0005).
 
 ## Step 2 — headless MCP reference adapter (4–5 days)
 

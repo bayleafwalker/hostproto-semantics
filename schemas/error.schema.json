@@ -23,6 +23,7 @@
         "writer_conflict",
         "capability_unsupported",
         "capability_blocked",
+        "capability_degraded",
         "deadline_exceeded",
         "host_rejected",
         "host_failed",

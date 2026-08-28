@@ -92,6 +92,13 @@
             "items": {
               "type": "string"
             }
+          },
+          "stability": {
+            "enum": [
+              "stable",
+              "experimental"
+            ],
+            "description": "Stability of the pinned adapter, not correctness. Evidence may still show exact semantics for an experimental one."
           }
         },
         "if": {
@@ -127,6 +134,10 @@
       "items": {
         "type": "string"
       }
+    },
+    "immutable_per_run": {
+      "const": true,
+      "description": "Capabilities do not change after admission. A degradation during a run is a recovery event (capability_degraded) that invalidates affected work, never a renegotiation."
     }
   },
   "description": "runtime verification is earned only by an operation that completed in a passed run. Declaration never upgrades it. partial never satisfies an exact requirement."

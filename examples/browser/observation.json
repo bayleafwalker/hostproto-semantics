@@ -27,5 +27,15 @@
     "raw_ref": null
   },
   "provider": "engine",
-  "deviations": []
+  "deviations": [
+    {
+      "kind": "suppression",
+      "reason": "duplicate title-changed carrying the already-applied title",
+      "rule_id": "norm.title.duplicate",
+      "raw_ref": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "object_ids": [
+        "page-1"
+      ]
+    }
+  ]
 }

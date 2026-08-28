@@ -1,0 +1,7 @@
+{
+  "kind": "unmapped_event",
+  "reason": "engine callback with no normalized projection; retained raw",
+  "data": {
+    "raw_kind": "load-changed:redirected"
+  }
+}

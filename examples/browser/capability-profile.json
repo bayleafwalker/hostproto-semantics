@@ -58,5 +58,6 @@
     "url",
     "title",
     "revision"
-  ]
+  ],
+  "immutable_per_run": true
 }

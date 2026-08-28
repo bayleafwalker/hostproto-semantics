@@ -1,0 +1,9 @@
+{
+  "kind": "suppression",
+  "reason": "output event after thread terminated cannot change canonical state",
+  "rule_id": "norm.terminal.late-output",
+  "raw_ref": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "object_ids": [
+    "thread-1"
+  ]
+}

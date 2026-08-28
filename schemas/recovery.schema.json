@@ -30,7 +30,8 @@
         "stale_observation",
         "client_interrupted",
         "writer_fenced",
-        "host_terminated"
+        "host_terminated",
+        "capability_degraded"
       ]
     },
     "context": {

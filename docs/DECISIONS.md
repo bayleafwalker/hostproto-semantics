@@ -76,3 +76,24 @@ were none to delete because browser-workbench never built them. What remains
 is renaming and de-browsering.
 
 **Guard.** Verification is dated. A later spec revision re-opens step 0.
+
+## ADR-0006: the 0.1.0 alignment added four semantics the browser-workbench lineage had lost
+
+**Context.** browser-workbench inherited hostproto 0.1.0's corpus but not all
+of its temporal rules. Mapping 0.1.0 directly exposed four things the
+schemas here did not say: an operation's terminal outcome (including
+`superseded` and `unknown`), typed suppression records, surface lifecycle,
+and capability degradation as a recovery cause.
+
+**Decision.** All four are added: `Receipt.outcome` (required), a `deviation`
+schema whose `suppression` kind requires `rule_id` and `raw_ref`,
+`SurfaceHandle.lifecycle`, and `capability_degraded` as both an error code
+and a recovery cause with `immutable_per_run` on the profile.
+
+**Consequence.** Eleven schemas. `Receipt.outcome = unknown` with
+`executed = false` is now the legal shape for "the deadline elapsed after the
+host was invoked" — the case both prior projects handled in prose only.
+
+**Guard.** The deviation schema is the one place a "we dropped it" can be
+recorded. A `deviations` array is required nowhere, so the guard is
+conformance tooling counting suppressions per run, as 0.1.0 required.

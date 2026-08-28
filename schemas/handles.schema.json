@@ -80,6 +80,16 @@
             "null"
           ],
           "description": "ISO-8601 or null for adapter-managed lifetime."
+        },
+        "lifecycle": {
+          "enum": [
+            "creating",
+            "open",
+            "closing",
+            "closed",
+            "terminated"
+          ],
+          "description": "Surface handles only. closed is terminal; terminated rejects operations but stays observable until released to closed. An id is never reused within a host."
         }
       }
     }

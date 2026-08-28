@@ -13,6 +13,7 @@
     "accepted",
     "executed",
     "verified",
+    "outcome",
     "provider",
     "caused_events",
     "effects",
@@ -109,11 +110,18 @@
     "deviations": {
       "type": "array",
       "items": {
-        "type": "object",
-        "required": [
-          "kind"
-        ]
+        "$ref": "https://hostproto.invalid/schemas/deviation.schema.json"
       }
+    },
+    "outcome": {
+      "enum": [
+        "completed",
+        "failed",
+        "stopped",
+        "superseded",
+        "unknown"
+      ],
+      "description": "Exactly one terminal outcome per operation. unknown: the deadline elapsed or the client was interrupted and the effect may have escaped; a deadline never proves an effect did not occur. superseded: a later operation on the same surface overtook this one; it must not silently vanish."
     }
   },
   "description": "attempted/accepted/executed/verified are independent. A receipt with executed=true and verified=false is legitimate and must be reported as such."

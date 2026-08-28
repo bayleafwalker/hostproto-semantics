@@ -27,12 +27,12 @@ class SchemaTests(unittest.TestCase):
             for path in sorted((EXAMPLES / lane).glob("*.json")):
                 if path.name == "README.json":
                     continue
-                schema = SCHEMA_DIR / f"{path.stem}.schema.json"
+                schema = SCHEMA_DIR / f"{path.stem.split('-unknown')[0]}.schema.json"
                 with self.subTest(lane=lane, example=path.name):
                     self.assertTrue(schema.is_file(), f"no schema for {path.name}")
                     self.assertEqual(validate(schema, json.loads(path.read_text())), [])
                     count += 1
-        self.assertGreaterEqual(count, 14)
+        self.assertGreaterEqual(count, 17)
 
     def test_the_same_schema_holds_browser_and_dap_instances(self) -> None:
         """Kill gate 1, at schema level: one envelope, two host classes."""
@@ -82,3 +82,29 @@ class SchemaTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BundleTests(unittest.TestCase):
+    def test_bundled_schema_has_no_remote_refs_and_still_validates_examples(self) -> None:
+        from hostproto.bundle import bundle, has_remote_ref
+        from hostproto.validate import Validator
+
+        for name in ("intent", "receipt", "error", "recovery", "observation"):
+            with self.subTest(name=name):
+                bundled = bundle(SCHEMA_DIR / f"{name}.schema.json")
+                self.assertFalse(has_remote_ref(bundled))
+                for lane in ("browser", "dap-sketch"):
+                    path = EXAMPLES / lane / f"{name}.json"
+                    if path.is_file():
+                        self.assertEqual(Validator(bundled).errors(json.loads(path.read_text())), [])
+
+    def test_receipt_outcome_is_required_and_unknown_is_legal(self) -> None:
+        receipt = example("browser", "receipt")
+        receipt.pop("outcome")
+        self.assertTrue(validate(SCHEMA_DIR / "receipt.schema.json", receipt))
+        self.assertEqual(validate(SCHEMA_DIR / "receipt.schema.json", example("browser", "receipt-unknown")), [])
+
+    def test_suppression_must_name_rule_and_raw_record(self) -> None:
+        deviation = example("dap-sketch", "deviation")
+        deviation.pop("raw_ref")
+        self.assertTrue(validate(SCHEMA_DIR / "deviation.schema.json", deviation))

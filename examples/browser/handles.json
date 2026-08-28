@@ -13,7 +13,8 @@
   "surface": {
     "id": "page-1",
     "kind": "surface",
-    "expires": null
+    "expires": null,
+    "lifecycle": "open"
   },
   "adapter_profile": "browser/v1",
   "writer": {

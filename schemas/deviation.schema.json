@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostproto.invalid/schemas/deviation.schema.json",
+  "title": "HostProto deviation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "reason"
+  ],
+  "properties": {
+    "kind": {
+      "enum": [
+        "suppression",
+        "unmapped_event",
+        "divergence",
+        "teardown_error",
+        "bounded_result"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rule_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Required for suppression: the normalization rule that suppressed a raw observation."
+    },
+    "raw_ref": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "Required for suppression: the raw record that was not folded into canonical state."
+    },
+    "object_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "data": {
+      "type": "object"
+    }
+  },
+  "description": "Something the adapter did not fold into canonical state, or could not. Never dropped silently: counts and categories appear in evidence. A normalization layer that merely throws inconvenient callbacks away has failed.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "suppression"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "rule_id",
+          "raw_ref"
+        ]
+      }
+    }
+  ]
+}
