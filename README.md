@@ -54,8 +54,10 @@ kill gates 1, 7, 8 (ADR-0008). Step 4 done: the A2A host-worker is
 [hostproto-dap-debugpy](https://github.com/bayleafwalker/hostproto-dap-debugpy)
 (ADR-0010); gates 1, 6, 8 held at runtime. Gate 1 was then tested late with a
 second debugger, [hostproto-dap-delve](https://github.com/bayleafwalker/hostproto-dap-delve)
-(ADR-0011): same envelope, no change. Step 6, native WebKitGTK as the
-challenger, remains optional.
+(ADR-0011): same envelope, no change. Both debugger adapters are now bindings
+on [hostproto-dap-core](https://github.com/bayleafwalker/hostproto-dap-core),
+whose promise is tested without any engine (ADR-0012). Step 6, native
+WebKitGTK as the challenger, remains optional.
 
 ```sh
 PYTHONPATH=src python3 -m unittest discover -s tests

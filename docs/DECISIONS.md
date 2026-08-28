@@ -233,3 +233,32 @@ and it caught its own author.
 
 **Guard.** Every receipt deviation in a test's *setup* is asserted, not
 just those in the step under test.
+
+## ADR-0012: hostproto-dap-core — the DAP semantics once, as a stated promise
+
+**Context.** ADR-0011 declined to extract a shared core because "two is not
+a pattern". The user asked to pre-generalize anyway, as a *promise*: state
+what every DAP binding gets and what it must supply, and test that promise
+without any engine.
+
+**Decision.** [hostproto-dap-core](https://github.com/bayleafwalker/hostproto-dap-core)
+holds the host, the MCP surface, the DAP client and the schema pin. A
+debugger is an `EngineBinding`: how to start it, its `initialize` and
+`launch` arguments, its identity, what it cannot do, and whether handles
+must return before the launch completes. The seam is exactly the measured
+diff between the two adapters (ADR-0011): debugpy is 27 lines, Delve 48.
+The promise is written down (`docs/PROMISE.md`) and tested against a
+scripted DAP engine over loopback — nine cases covering revision, refusal
+before send, pre-emption, `unknown`, omitted-not-lost, the no-`continued`
+grace path, read-back, host requests, and recovery — so a semantic change
+needs a fake-engine case before a real engine confirms it.
+
+**Consequence.** Bindings pin the core by git commit; the core pins the
+bundles by digest. A binding may not compute a revision, mint a target,
+decide `verified`, or add a projection or intent kind — that is either a
+core change with a promise test or a HostProto change with an ADR here.
+No schema changed.
+
+**Guard.** The fake engine is the only place a DAP quirk may be simulated;
+a quirk that cannot be expressed there is a real-engine fact and stays in
+that binding's `docs/DECISIONS.md`.
