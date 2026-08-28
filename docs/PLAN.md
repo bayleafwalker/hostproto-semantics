@@ -75,11 +75,24 @@ unchanged schemas; gates 1, 7 and 8 did not fire (ADR-0008). One general
 rule was stated as a result: the cursor is always host-assigned, a host's
 own ordinals are raw provenance. Step 5 is admissible.
 
-## Step 4 — A2A host-worker (3 days)
+## Step 4 — A2A host-worker (3 days) — done 2026-08-28
 
 One Agent Card, one real workflow skill (for example
 `inspect_web_application`), A2A task projected from a domain run, MCP
 HostProto server used internally. Evidence manifest as an A2A artifact.
+
+Outcome: [hostproto-a2a-worker](https://github.com/bayleafwalker/hostproto-a2a-worker)
+on A2A 1.0 (`@a2a-js/sdk` 1.1.0, JSON-RPC). The `hostproto-work-order/v1`
+profile is a required card extension whose params pin this repository's
+commit and bundle digests — and A2A enforces it on the wire. Interruptions
+map as predicted: a work order without a `url` and a script dialog behind a
+`decision_token` are both `INPUT_REQUIRED`; the adapter's `error/v1` and
+`recovery/v1` ride `FAILED` verbatim; a stale target is
+`recovery/v1 {reobserve_required}`. Eleven wire tests: real A2A client, real
+worker, real adapter over stdio, real Chromium. Kill gates 3, 4 and 5 did not
+fire (ADR-0009). The worker found and fixed an adapter defect (an explicit
+dialog `accept` was dismissed) — visible on the wire because the receipt
+carries the decision.
 
 ## Step 5 — DAP adapter (full)
 

@@ -48,7 +48,10 @@ features verified against the specs, with four nuances recorded in
 for MCP tool definitions (ADR-0006). Step 2 done: the Playwright reference adapter is
 [hostproto-mcp-playwright](https://github.com/bayleafwalker/hostproto-mcp-playwright)
 (ADR-0007). Step 3 done: the DAP spike (`docs/DAP_SPIKE.md`) fired none of
-kill gates 1, 7, 8 (ADR-0008). Step 4, the A2A host-worker, is next.
+kill gates 1, 7, 8 (ADR-0008). Step 4 done: the A2A host-worker is
+[hostproto-a2a-worker](https://github.com/bayleafwalker/hostproto-a2a-worker)
+(ADR-0009); gates 3, 4, 5 did not fire. Step 5, the DAP runtime on debugpy,
+is next.
 
 ```sh
 PYTHONPATH=src python3 -m unittest discover -s tests

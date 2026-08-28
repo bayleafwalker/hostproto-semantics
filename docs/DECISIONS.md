@@ -142,3 +142,31 @@ receipt design rather than merely compatibility with it.
 runtime proves an adapter can honour them — in particular
 `target_invalidated` before send for a real `variablesReference` after
 `continue`.
+
+## ADR-0009: step 4 — the worker is projection, and projection held
+
+**Context.** The A2A host-worker (hostproto-a2a-worker) put one delegated
+skill on A2A 1.0 with the MCP adapter inside and a minimal domain runtime
+as the authoritative run owner.
+
+**Decision.** No schema change. Three things confirmed on the wire:
+
+1. The profile extension is a contract, not documentation: A2A refuses a
+   caller that does not declare a `required` extension. The card's params
+   carry this repository's commit and every bundle digest, so a client can
+   verify each HostProto object it receives.
+2. The three task notions stayed correlated, never merged. The run carries
+   the task id and the HostProto handles; the task carries the run id in
+   metadata; the adapter knows neither. No `Task` type appeared here.
+3. A HostProto interruption at the primitive level (a `decision_token`
+   held by the adapter) is an `INPUT_REQUIRED` at the assignment level with
+   the same payload, as `RESPONSIBILITY_SPLIT.md` predicted.
+
+**Consequence.** Kill gates 3, 4 and 5 did not fire: the run store is the
+worker's, one skill covers many primitives, one task covers many MCP calls.
+One adapter gap noted, not a semantic: the host-side `await` is all-of, and
+"idle **or** dialog opened" is what a worker actually waits for.
+
+**Guard.** The domain runtime is in-memory and single-process. Replacing it
+with ActionQ must not change a single line of `executor.ts`'s projection;
+if it does, the split was wrong.
