@@ -15,7 +15,8 @@ linked spec section, with the section and revision recorded in
 | --- | --- | --- |
 | MCP: implicit sessions removed; explicit server-minted handles for cross-request state | handles map 1:1 | **verified** — changelog 2026-07-28, major change 1 (SEP-2567); `server/tools` § Stateful Tools. *Nuance:* that section is non-normative and "the protocol has no concept of a state handle" — a handle is an ordinary string argument. HostProto's `handles` schema is therefore needed, not duplicated. |
 | MCP: `server/discover`, per-request capability metadata | capability profile publication | **verified** — major changes 2 and 3 (SEP-2575); capabilities travel in `_meta` per request |
-| MCP: `subscriptions/listen` | surface-change notifications | **verified with a constraint** — major change 4. Opt-in types are `toolsListChanged`, `promptsListChanged`, `resourcesListChanged`, `resourceSubscriptions` only. Host-state change must be modelled as a **resource subscription** on a surface resource; there is no arbitrary event channel. |
+| MCP: `subscriptions/listen` | surface-change notifications | **verified with a constraint** — major change 4. Opt-in types are `toolsListChanged`, `promptsListChanged`, `resourcesListChanged`, `resourceSubscriptions` only. Host-state change must be modelled as a **resource subscription** on a surface resource; there is no arbitrary event channel. *Wire correction (step 2):* `resources/subscribe` does not exist on this era at all — the client SDK refuses it. `resourceSubscriptions` is an **array of URIs** in the listen filter, honoured only when the server declares `resources.subscribe`. |
+| MCP: `server/discover` result shape | capability profile publication | *Wire correction (step 2):* the result is `{ supportedVersions, capabilities, instructions }`; server identity travels in every result's `_meta` (`io.modelcontextprotocol/serverInfo`), not in the discover body. |
 | MCP: elicitation (MRTR) for approval / auth / missing input | recovery → human | **verified** — major changes 7 and 8 (SEP-2322): `resultType: "input_required"`, `inputRequests`, retry with `inputResponses` + `requestState` |
 | MCP Tasks extension: durable handles, polling, `input_required`, cooperative cancel | one async primitive | **verified with differences** — `io.modelcontextprotocol/tasks` (major change 6, SEP-2663): `tasks/get` polling, `tasks/update` for input, `tasks/cancel` cooperative, notifications via `subscriptions/listen`, server may return a task unsolicited. **`tasks/list` was removed** and SSE resumability was removed (major change 9): reconnection is by durable task id only, and *listing* tasks is not MCP's job — it is A2A's or the domain runtime's. |
 | A2A v1: `ListTasks`, `GetTask`, `SubscribeToTask`, `CancelTask`, artifact updates, resubscription | domain-run projection | **verified** — A2A 1.0.0 "what's new": all four operations present (renamed from `tasks/*`), `TaskArtifactUpdateEvent` with `index`, tasks scoped to the authenticated caller |
@@ -44,11 +45,18 @@ Outcome: both alignment maps complete with no *unmapped* row; `hostproto.bundle`
 produces self-contained schemas; four semantics recovered from 0.1.0
 (ADR-0006). Nothing deleted (ADR-0005).
 
-## Step 2 — headless MCP reference adapter (4–5 days)
+## Step 2 — headless MCP reference adapter (4–5 days) — done 2026-08-28
 
 Playwright, because it is a cheap live denominator. Expose create-context,
 observe, act, wait, close as MCP tools using these schemas directly;
 receipts as `structuredContent`; screenshots / DOM / traces as resources.
+
+Landed as [hostproto-mcp-playwright](https://github.com/bayleafwalker/hostproto-mcp-playwright):
+tool schemas are the `bundled/` files verbatim, pinned by digest; wire-level
+tests (real client ↔ stdio server ↔ Chromium) cover handles, revisioned
+observation with explicit loss, target invalidation before host invocation,
+preconditions, held-open dialogs, `deadline_exceeded`, and the earned
+capability ledger. Two corrections to the step-0 table came out of it, below.
 This inverts the browser-workbench rule that the oracle is never core
 (`DECISIONS.md` ADR-0002): WebKitGTK becomes the challenger that checks
 Playwright, not the reverse.

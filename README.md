@@ -43,8 +43,9 @@ conformance backends live elsewhere and are referenced, not vendored:
 Step 0 done (2026-08-28): all eight assumed MCP 2026-07-28 / A2A 1.0.0
 features verified against the specs, with four nuances recorded in
 `docs/PLAN.md` and ADR-0005. Step 1 done: both alignment maps complete, eleven schemas, `hostproto.bundle`
-for MCP tool definitions (ADR-0006). Step 2, the Playwright MCP reference
-adapter, is next.
+for MCP tool definitions (ADR-0006). Step 2 done: the Playwright reference adapter is
+[hostproto-mcp-playwright](https://github.com/bayleafwalker/hostproto-mcp-playwright)
+(ADR-0007). Step 3, the DAP schema spike, is next.
 
 ```sh
 PYTHONPATH=src python3 -m unittest discover -s tests

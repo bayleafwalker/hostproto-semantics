@@ -97,3 +97,22 @@ host was invoked" — the case both prior projects handled in prose only.
 **Guard.** The deviation schema is the one place a "we dropped it" can be
 recorded. A `deviations` array is required nowhere, so the guard is
 conformance tooling counting suppressions per run, as 0.1.0 required.
+
+## ADR-0007: step 2 confirmed the mapping on the wire, with two corrections
+
+**Context.** The reference adapter (hostproto-mcp-playwright) put the bundles
+on a real MCP 2026-07-28 connection using SDK v2.0.0.
+
+**Decision.** Two rows of the step-0 table are amended from wire evidence:
+`resources/subscribe` is absent on the era and resource subscriptions are URI
+arrays in the `subscriptions/listen` filter; `server/discover` returns
+`supportedVersions` and identity rides `_meta`. No schema changed. The
+adapter's own `docs/DECISIONS.md` ADR-0003 holds the full list.
+
+**Consequence.** Handles, revisioned observation, target invalidation,
+preconditions, receipts with `outcome`, evidence refs, the earned capability
+profile, and `error.host_invoked` all crossed the wire unchanged. Kill gates
+2 and 6 did not fire: no payload degenerated to free-form JSON, and the
+adapter needed no escape hatch.
+
+**Guard.** Step 3 (DAP spike) is next and is where gate 1 gets tested.
